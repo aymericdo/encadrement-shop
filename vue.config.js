@@ -1,20 +1,17 @@
 module.exports = {
-  devServer: {
-    host: "lite.bdfi.test",
-  },
   pwa: {
-    name: "BDFI",
-    themeColor: "#2d3748",
-    msTileColor: "#2d3748",
-    appleMobileWebAppCapable: "no",
-    appleMobileWebAppStatusBarStyle: "default",
-    manifestPath: "manifest.json",
+    name: "Encadrement - Shop",
+    themeColor: "#4DBA87",
+    msTileColor: "#000000",
+    appleMobileWebAppCapable: "yes",
+    appleMobileWebAppStatusBarStyle: "black",
+
+    // configure the workbox plugin
     workboxPluginMode: "InjectManifest",
     workboxOptions: {
       // swSrc is required in InjectManifest mode.
-      swSrc: "service-worker.js",
+      swSrc: "dev/sw.js",
       // ...other Workbox options...
-      exclude: [/\.map$/, /_redirects/],
     },
   },
 };
