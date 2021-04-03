@@ -10,7 +10,7 @@ export const state: RelevantAdState = {
   error: false,
 };
 
-const namespaced: boolean = true;
+const namespaced = true;
 
 export const relevantAd: Module<RelevantAdState, RootState> = {
   namespaced,
