@@ -1,8 +1,18 @@
 <template>
   <div class="list-page">
-    <div class="card" v-for="ad of relevantAds" :key="ad.id">
-      {{ ad.website }}
-    </div>
+    <template v-for="ad of relevantAds" :key="ad.id">
+      <div
+        class="card"
+        v-if="getUrl(ad.website, ad.id)"
+        @click="redirectTo(ad)"
+      >
+        <img
+          class="image"
+          :src="require(`@/assets/${ad.website}-img.png`)"
+          :alt="ad.website"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -21,8 +31,77 @@ export default class ListPage extends Vue {
   mounted(): void {
     this.fetchData();
   }
+
+  redirectTo(ad: RelevantAd): void {
+    window.open(this.getUrl(ad.website, ad.id), "_blank");
+  }
+
+  getUrl(website: string, id: string): string {
+    if (!id) return "";
+
+    switch (website) {
+      case "pap": {
+        return `https://www.pap.fr/annonces/${id}`;
+      }
+      case "leboncoin": {
+        const regex = id.match(/\d+/g);
+        const realId = regex && regex[0];
+        return `https://www.leboncoin.fr/locations/${realId}.htm`;
+      }
+      case "seloger": {
+        return `https://www.seloger.com/annonces/locations/appartement/ville/quartier/${id}.htm`;
+      }
+      case "lefigaro": {
+        return `https://immobilier.lefigaro.fr/annonces/annonce-${id}.html`;
+      }
+      case "bienici": {
+        return `https://www.bienici.com/annonce/location/paris-18e/appartement/1piece/${id}`;
+      }
+      case "bellesdemeures": {
+        return `https://www.bellesdemeures.com/en/listings/rental/tt-1-tb-1-pl-48256/${id}`;
+      }
+      case "facebook": {
+        return `https://www.facebook.com/marketplace/item/${id}`;
+      }
+      case "logicimmo": {
+        return `https://www.logic-immo.com/detail-location-${id}.htm`;
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.list-page {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.card {
+  cursor: pointer;
+  width: 33%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  box-sizing: border-box;
+}
+
+.image {
+  width: 100%;
+}
+
+@media screen and (max-width: 856px) {
+  .card {
+    width: 100%;
+  }
+}
+</style>
