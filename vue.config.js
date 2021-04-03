@@ -6,11 +6,9 @@ module.exports = {
     appleMobileWebAppCapable: "yes",
     appleMobileWebAppStatusBarStyle: "black",
 
-    // configure the workbox plugin
-    workboxPluginMode: "InjectManifest",
+    workboxPluginMode: "GenerateSW",
     workboxOptions: {
-      // swSrc is required in InjectManifest mode.
-      swSrc: "dev/sw.js",
+      exclude: [/\.map$/, /netlify.toml/],
       // ...other Workbox options...
     },
   },
