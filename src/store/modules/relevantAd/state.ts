@@ -9,7 +9,7 @@ export const state: RelevantAdState = {
   relevantAdList: [],
   loading: false,
   error: false,
-  currentPage: 1,
+  currentPage: 0,
   totalPages: null,
 };
 

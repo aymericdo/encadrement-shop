@@ -4,7 +4,7 @@
       <div
         class="card"
         :class="{ loading: isLoading }"
-        v-if="getUrl(ad.website, ad.id)"
+        v-if="getUrl(ad.website, ad.id, ad.url)"
       >
         <div class="sub-card">
           <div class="content" @click="redirectTo(ad)">
@@ -104,10 +104,14 @@ export default defineComponent({
       return `Vu le ${dateFormat} à ${timeFormat}`;
     },
     redirectTo(ad: RelevantAd): void {
-      window.open(this.getUrl(ad.website, ad.id), "_blank");
+      window.open(this.getUrl(ad.website, ad.id, ad.url), "_blank");
     },
-    getUrl(website: string, id: string): string {
+    getUrl(website: string, id: string, url?: string): string {
       if (!id) return "";
+
+      if (url) {
+        return url;
+      }
 
       switch (website) {
         case "pap": {

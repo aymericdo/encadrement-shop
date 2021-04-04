@@ -8,4 +8,5 @@ export interface RelevantAd {
   hasFurniture: boolean;
   price: number;
   district: string;
+  url: string;
 }
