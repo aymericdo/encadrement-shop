@@ -10,6 +10,7 @@
         <Burger
           class="sidebar-burger"
           :isBurgerActive="isPanelOpen"
+          :isFixed="false"
           @togglingSidebar="closeSidebarPanel"
           ><span></span
         ></Burger>
@@ -59,10 +60,10 @@ export default class Sidebar extends Vue {}
   top: 0;
   left: 0;
   cursor: pointer;
+  z-index: 2;
 }
 
 .sidebar-burger {
-  position: absolute;
   top: 1em;
   right: 1em;
 }

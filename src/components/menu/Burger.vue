@@ -1,5 +1,9 @@
 <template>
-  <div id="burger" :class="{ active: isBurgerActive }" @click.prevent="toggle">
+  <div
+    id="burger"
+    :class="{ active: isBurgerActive, fixed: isFixed }"
+    @click.prevent="toggle"
+  >
     <button type="button" class="burger-button" title="Menu">
       <span class="burger-bar burger-bar--1"></span>
       <span class="burger-bar burger-bar--2"></span>
@@ -17,6 +21,10 @@ import { Options, Vue } from "vue-class-component";
 @Options({
   props: {
     isBurgerActive: Boolean,
+    isFixed: {
+      type: Boolean,
+      default: true,
+    },
   },
   methods: {
     toggle() {
@@ -108,6 +116,12 @@ button:focus {
 #burger {
   display: flex;
   cursor: pointer;
+  position: absolute;
+}
+
+#burger.fixed {
+  position: fixed;
+  z-index: 2;
 }
 
 .logo {

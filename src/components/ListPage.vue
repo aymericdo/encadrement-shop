@@ -1,16 +1,21 @@
 <template>
   <div class="list-page">
     <template v-for="ad of relevantAds" :key="ad.id">
-      <div
-        class="card"
-        v-if="getUrl(ad.website, ad.id)"
-        @click="redirectTo(ad)"
-      >
-        <img
-          class="image"
-          :src="require(`@/assets/${ad.website}-img.png`)"
-          :alt="ad.website"
-        />
+      <div class="card" v-if="getUrl(ad.website, ad.id)">
+        <div class="sub-card">
+          <div class="content" @click="redirectTo(ad)">
+            <div class="specs">
+              <span
+                >{{ ad.roomCount }} pièce{{ ad.roomCount > 1 ? "s" : "" }}</span
+              >
+            </div>
+            <img
+              class="image"
+              :src="require(`@/assets/${ad.website}-img.png`)"
+              :alt="ad.website"
+            />
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -85,23 +90,52 @@ export default class ListPage extends Vue {
 }
 
 .card {
-  cursor: pointer;
   width: 33%;
-  height: 200px;
+  height: 0;
+  padding-bottom: 33%;
+  position: relative;
+}
+
+.sub-card {
+  position: absolute;
+  padding: 2em;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+}
+
+.content {
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2em;
-  box-sizing: border-box;
+  box-shadow: 0px 0px 20px #050505;
+  border-radius: 8px;
+}
+
+.content:hover {
+  box-shadow: 0px 0px 10px #050505;
+}
+
+.specs {
+  font-weight: 500;
 }
 
 .image {
+  position: absolute;
   width: 100%;
+  opacity: 0.2;
+  padding: 2em;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 856px) {
   .card {
     width: 100%;
+    padding-bottom: 100%;
   }
 }
 </style>
