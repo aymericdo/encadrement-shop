@@ -224,7 +224,7 @@ export default defineComponent({
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 856px) {
+@media screen and (max-width: $mobileSize) {
   .card {
     width: 100%;
     padding-bottom: 100%;

@@ -12,6 +12,9 @@
           <router-link to="/">Accueil</router-link>
         </li>
         <li>
+          <a href="https://encadrement-loyers.fr">Encadrement</a>
+        </li>
+        <li>
           <router-link to="/about">À propos</router-link>
         </li>
       </ul>

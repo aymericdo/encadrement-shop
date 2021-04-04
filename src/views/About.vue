@@ -1,7 +1,18 @@
 <template>
   <div class="about">
     <Menu></Menu>
-    <h1>This is an about page</h1>
+    <div class="content">
+      <h1>Coucou</h1>
+      <p>
+        On s'est dit qu'on n'allait pas s'arrêter un si bon chemin, alors pour
+        vous (et vos yeux ébahis), une page ENTIÈRE d'annonces complètement
+        vérifiées par nos soins.
+      </p>
+      <p>
+        Comme ça, plus besoin de tergiverser (ni de justifier), ces annonces
+        sont de fait, légales.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -16,3 +27,25 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped lang="scss">
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 4em;
+
+  & > p {
+    display: flex;
+    align-self: start;
+    text-align: justify;
+  }
+}
+
+@media screen and (max-width: $mobileSize) {
+  .content {
+    padding: 0 0.625em;
+  }
+}
+</style>
