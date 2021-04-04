@@ -6,13 +6,13 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import Menu from "@/components/menu/Menu.vue";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "About",
   components: {
     Menu,
   },
-})
-export default class About extends Vue {}
+});
 </script>

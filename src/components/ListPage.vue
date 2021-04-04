@@ -1,7 +1,11 @@
 <template>
   <div class="list-page">
-    <template v-for="ad of relevantAds" :key="ad.id">
-      <div class="card" v-if="getUrl(ad.website, ad.id)">
+    <template v-for="ad of relevantAds" :key="ad._id">
+      <div
+        class="card"
+        :class="{ loading: isLoading }"
+        v-if="getUrl(ad.website, ad.id)"
+      >
         <div class="sub-card">
           <div class="content" @click="redirectTo(ad)">
             <div class="specs">
@@ -11,73 +15,119 @@
             </div>
             <img
               class="image"
-              :src="require(`@/assets/${ad.website}-img.png`)"
+              :src="require(`@/assets/images/${ad.website}-img.png`)"
               :alt="ad.website"
             />
           </div>
         </div>
       </div>
     </template>
+    <div class="center">
+      <half-circle-spinner
+        :animation-duration="1000"
+        color="#fdcd56"
+        :size="100"
+        v-if="isLoading"
+        class="spinner"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { RelevantAd } from "@/interfaces/relevantAd";
-import { Options, Vue } from "vue-class-component";
-import { Action, Getter } from "vuex-class";
+import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
+import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
+import { computed, defineComponent, onMounted, onUnmounted } from "vue";
+import { HalfCircleSpinner } from "epic-spinners";
+import { useStore } from "vuex";
+
 const namespace = "relevantAd";
 
-@Options({})
-export default class ListPage extends Vue {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  @Action("fetchData", { namespace }) fetchData: any;
-  @Getter("getRelevantAds", { namespace }) relevantAds!: RelevantAd[];
+export default defineComponent({
+  name: "ListPage",
+  components: {
+    HalfCircleSpinner,
+  },
+  setup() {
+    const store = useStore();
 
-  mounted(): void {
-    this.fetchData();
-  }
+    const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
+    const isLoading = computed(
+      () => store.getters[`${namespace}/getIsLoading`]
+    );
 
-  redirectTo(ad: RelevantAd): void {
-    window.open(this.getUrl(ad.website, ad.id), "_blank");
-  }
+    const relevantAds = computed(
+      () => store.getters[`${namespace}/getRelevantAds`]
+    );
 
-  getUrl(website: string, id: string): string {
-    if (!id) return "";
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        store.dispatch(
+          `${namespace}/${RelevantAdActionTypes.FetchRelevantAds}`,
+          { page: page.value }
+        );
+      }
+    };
 
-    switch (website) {
-      case "pap": {
-        return `https://www.pap.fr/annonces/${id}`;
-      }
-      case "leboncoin": {
-        const regex = id.match(/\d+/g);
-        const realId = regex && regex[0];
-        return `https://www.leboncoin.fr/locations/${realId}.htm`;
-      }
-      case "seloger": {
-        return `https://www.seloger.com/annonces/locations/appartement/ville/quartier/${id}.htm`;
-      }
-      case "lefigaro": {
-        return `https://immobilier.lefigaro.fr/annonces/annonce-${id}.html`;
-      }
-      case "bienici": {
-        return `https://www.bienici.com/annonce/location/paris-18e/appartement/1piece/${id}`;
-      }
-      case "bellesdemeures": {
-        return `https://www.bellesdemeures.com/en/listings/rental/tt-1-tb-1-pl-48256/${id}`;
-      }
-      case "facebook": {
-        return `https://www.facebook.com/marketplace/item/${id}`;
-      }
-      case "logicimmo": {
-        return `https://www.logic-immo.com/detail-location-${id}.htm`;
-      }
+    onMounted(() => {
+      store.dispatch(`${namespace}/${RelevantAdActionTypes.FetchRelevantAds}`, {
+        page: page.value,
+      });
+      window.addEventListener("scroll", handleScroll);
+    });
 
-      default: {
-        return "";
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll);
+    });
+
+    return {
+      page,
+      relevantAds,
+      isLoading,
+    };
+  },
+  methods: {
+    redirectTo(ad: RelevantAd): void {
+      window.open(this.getUrl(ad.website, ad.id), "_blank");
+    },
+    getUrl(website: string, id: string): string {
+      if (!id) return "";
+
+      switch (website) {
+        case "pap": {
+          return `https://www.pap.fr/annonces/${id}`;
+        }
+        case "leboncoin": {
+          const regex = id.match(/\d+/g);
+          const realId = regex && regex[0];
+          return `https://www.leboncoin.fr/locations/${realId}.htm`;
+        }
+        case "seloger": {
+          return `https://www.seloger.com/annonces/locations/appartement/ville/quartier/${id}.htm`;
+        }
+        case "lefigaro": {
+          return `https://immobilier.lefigaro.fr/annonces/annonce-${id}.html`;
+        }
+        case "bienici": {
+          return `https://www.bienici.com/annonce/location/paris-18e/appartement/1piece/${id}`;
+        }
+        case "bellesdemeures": {
+          return `https://www.bellesdemeures.com/en/listings/rental/tt-1-tb-1-pl-48256/${id}`;
+        }
+        case "facebook": {
+          return `https://www.facebook.com/marketplace/item/${id}`;
+        }
+        case "logicimmo": {
+          return `https://www.logic-immo.com/detail-location-${id}.htm`;
+        }
+
+        default: {
+          return "";
+        }
       }
-    }
-  }
-}
+    },
+  },
+});
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -89,11 +139,22 @@ export default class ListPage extends Vue {
   flex-wrap: wrap;
 }
 
+.center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .card {
   width: 33%;
   height: 0;
   padding-bottom: 33%;
   position: relative;
+}
+
+.card.loading {
+  opacity: 0.5;
 }
 
 .sub-card {

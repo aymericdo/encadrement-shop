@@ -2,12 +2,18 @@
   <router-view />
 </template>
 
-<style>
+<style lang="scss">
+@import "@/assets/scss/garnett.scss";
+@import "@/assets/scss/variables.scss";
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Garnett", "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  font-size: 1rem;
+  letter-spacing: -0.23px;
 }
 </style>

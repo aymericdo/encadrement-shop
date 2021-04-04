@@ -19,13 +19,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Burger from "@/components/menu/Burger.vue";
 import Sidebar from "@/components/menu/Sidebar.vue";
-import { ref } from "vue";
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, ref } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "Menu",
   components: {
     Burger,
     Sidebar,
@@ -36,7 +36,7 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   methods: {
-    togglingSidebar(isOpen) {
+    togglingSidebar(isOpen: boolean) {
       this.isPanelOpen = isOpen;
     },
   },
@@ -45,10 +45,7 @@ import { Options, Vue } from "vue-class-component";
       this.isPanelOpen = false;
     },
   },
-})
-export default class Menu extends Vue {
-  isPanelOpen = false;
-}
+});
 </script>
 
 <style scoped>

@@ -20,13 +20,16 @@
   </div>
 </template>
 
-<script>
-import { Options, Vue } from "vue-class-component";
+<script lang="ts">
+import { defineComponent } from "vue";
 import Burger from "@/components/menu/Burger.vue";
 
-@Options({
+export default defineComponent({
+  name: "Sidebar",
   props: {
-    isPanelOpen: Boolean,
+    isPanelOpen: {
+      type: Boolean,
+    },
   },
   components: {
     Burger,
@@ -36,8 +39,7 @@ import Burger from "@/components/menu/Burger.vue";
       this.$emit("toggleClosing", false);
     },
   },
-})
-export default class Sidebar extends Vue {}
+});
 </script>
 
 <style>

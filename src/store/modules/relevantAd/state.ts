@@ -2,12 +2,15 @@ import { Module } from "vuex";
 import { getters } from "./getters";
 import { actions } from "./actions";
 import { mutations } from "./mutations";
-import { RelevantAdState } from "./types";
-import { RootState } from "../types";
+import { RelevantAdState } from "./state-types";
+import { RootState } from "@/store/types";
 
 export const state: RelevantAdState = {
   relevantAdList: [],
+  loading: false,
   error: false,
+  currentPage: 1,
+  totalPages: null,
 };
 
 const namespaced = true;

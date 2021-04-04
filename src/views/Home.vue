@@ -6,15 +6,15 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 import Menu from "@/components/menu/Menu.vue";
 import ListPage from "@/components/ListPage.vue";
 
-@Options({
+export default defineComponent({
+  name: "Home",
   components: {
     Menu,
     ListPage,
   },
-})
-export default class Home extends Vue {}
+});
 </script>

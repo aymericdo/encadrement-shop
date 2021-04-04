@@ -3,5 +3,8 @@ import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
+import { activeHotReload } from "./store/hotReload";
+
+activeHotReload(store);
 
 createApp(App).use(store).use(router).mount("#app");

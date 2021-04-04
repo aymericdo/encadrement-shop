@@ -1,4 +1,5 @@
 export interface RelevantAd {
+  _id: string;
   id: string;
   surface: number;
   roomCount: number;

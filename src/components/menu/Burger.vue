@@ -15,12 +15,15 @@
   </div>
 </template>
 
-<script>
-import { Options, Vue } from "vue-class-component";
+<script lang="ts">
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "Burger",
   props: {
-    isBurgerActive: Boolean,
+    isBurgerActive: {
+      type: Boolean,
+    },
     isFixed: {
       type: Boolean,
       default: true,
@@ -31,8 +34,7 @@ import { Options, Vue } from "vue-class-component";
       this.$emit("togglingSidebar", !this.isBurgerActive);
     },
   },
-})
-export default class Burger extends Vue {}
+});
 </script>
 <style>
 button {
@@ -127,6 +129,7 @@ button:focus {
 .logo {
   align-self: center;
   font-weight: bold;
+  font-size: 1.25em;
   padding: 0 6px;
   z-index: 999;
 }

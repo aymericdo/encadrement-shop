@@ -12,4 +12,14 @@ module.exports = {
       // ...other Workbox options...
     },
   },
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `
+          @import "~@/assets/scss/variables.scss";
+          @import "~@/assets/scss/garnett.scss";
+        `,
+      },
+    },
+  },
 };
