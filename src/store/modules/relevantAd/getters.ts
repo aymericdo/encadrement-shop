@@ -16,4 +16,8 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     const { loading } = state;
     return loading;
   },
+  getTotalPages(state): number | null {
+    const { totalPages } = state;
+    return totalPages;
+  },
 };

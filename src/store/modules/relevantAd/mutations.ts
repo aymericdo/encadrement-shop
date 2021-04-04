@@ -19,6 +19,9 @@ export const mutations: MutationTree<RelevantAdState> = {
   [RelevantAdMutationType.IncrementPage](state) {
     state.currentPage += 1;
   },
+  [RelevantAdMutationType.SetTotalPages](state, payload) {
+    state.totalPages = payload;
+  },
   [RelevantAdMutationType.StartLoading](state) {
     state.loading = true;
   },

@@ -57,6 +57,9 @@ export default defineComponent({
     const store = useStore();
 
     const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
+    const totalPages = computed(
+      () => store.getters[`${namespace}/getTotalPages`]
+    );
     const isLoading = computed(
       () => store.getters[`${namespace}/getIsLoading`]
     );
@@ -66,7 +69,11 @@ export default defineComponent({
     );
 
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (
+        !isLoading.value &&
+        page.value < totalPages.value &&
+        window.innerHeight + window.scrollY >= document.body.offsetHeight
+      ) {
         store.dispatch(
           `${namespace}/${RelevantAdActionTypes.FetchRelevantAds}`,
           { page: page.value }
@@ -89,6 +96,7 @@ export default defineComponent({
       page,
       relevantAds,
       isLoading,
+      totalPages,
     };
   },
   methods: {

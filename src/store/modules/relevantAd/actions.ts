@@ -24,10 +24,15 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
         });
 
         const payload: RelevantAd[] = response && response.data;
+        const headers = response && response.headers;
         commit(RelevantAdMutationType.AddRelevantAds, payload);
         commit(RelevantAdMutationType.StopLoading);
         commit(RelevantAdMutationType.IncrementPage);
-        // I'm a fuckin asshole
+        commit(
+          RelevantAdMutationType.SetTotalPages,
+          Math.ceil(headers["x-total-count"] / PER_PAGE)
+        );
+        // I'm a fuckin asshole ↓
       }, 200);
     } catch (error) {
       console.log(error);
