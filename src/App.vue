@@ -3,9 +3,6 @@
 </template>
 
 <style lang="scss">
-@import "@/assets/scss/garnett.scss";
-@import "@/assets/scss/variables.scss";
-
 #app {
   font-family: "Garnett", "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

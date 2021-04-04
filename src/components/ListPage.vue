@@ -9,9 +9,14 @@
         <div class="sub-card">
           <div class="content" @click="redirectTo(ad)">
             <div class="specs">
-              <span
-                >{{ ad.roomCount }} pièce{{ ad.roomCount > 1 ? "s" : "" }}</span
-              >
+              <div>
+                {{ ad.roomCount }} pièce{{ ad.roomCount > 1 ? "s" : "" }}
+              </div>
+              <div>{{ ad.surface }}m²</div>
+              <div>{{ ad.district }}</div>
+              <div>{{ ad.price }}€</div>
+              <div class="space"></div>
+              <span>{{ getDisplayableDate(ad.createdAt) }}</span>
             </div>
             <img
               class="image"
@@ -87,6 +92,17 @@ export default defineComponent({
     };
   },
   methods: {
+    getDisplayableDate(date: string): string {
+      const d = new Date(date);
+
+      const dateFormat = d.toLocaleDateString();
+      const timeFormat = d.toLocaleTimeString(navigator.language, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      return `Vu le ${dateFormat} à ${timeFormat}`;
+    },
     redirectTo(ad: RelevantAd): void {
       window.open(this.getUrl(ad.website, ad.id), "_blank");
     },
@@ -131,12 +147,13 @@ export default defineComponent({
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 .list-page {
   display: flex;
   flex: 1;
   flex-direction: row;
   flex-wrap: wrap;
+  margin-top: 1em;
 }
 
 .center {
@@ -182,7 +199,21 @@ export default defineComponent({
 }
 
 .specs {
+  height: 100%;
+  width: 100%;
   font-weight: 500;
+  padding: 1em;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  & > .space {
+    flex: 1;
+  }
+
+  > div:not(:last-child) {
+    margin-bottom: 0.625em;
+  }
 }
 
 .image {
