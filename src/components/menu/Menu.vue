@@ -12,7 +12,9 @@
           <router-link to="/">Accueil</router-link>
         </li>
         <li>
-          <a href="https://encadrement-loyers.fr">Encadrement</a>
+          <a class="encadrement-redirect" href="https://encadrement-loyers.fr"
+            >Encadrement</a
+          >
         </li>
         <li>
           <router-link to="/about">À propos</router-link>
@@ -51,7 +53,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 200ms ease;
@@ -90,12 +92,13 @@ ul.sidebar-panel-nav > li > .annexe-list > a {
 
 ul.sidebar-panel-nav > li a {
   position: relative;
-  color: black;
+  color: $deepblack;
   text-decoration: none;
   font-size: 1.5rem;
   display: flex;
   flex: 1;
   cursor: pointer;
+  font-weight: 500;
 }
 
 ul.sidebar-panel-nav > li a:not(.router-link-exact-active)::after {
@@ -103,8 +106,8 @@ ul.sidebar-panel-nav > li a:not(.router-link-exact-active)::after {
   bottom: -2px;
   content: "";
   width: 100%;
-  height: 2px;
-  background: #000;
+  height: 3px;
+  background: $deepblack;
   transition: all 200ms ease;
   transition-property: opacity, transform;
   opacity: 0;
@@ -116,6 +119,12 @@ ul.sidebar-panel-nav > li a:not(.router-link-exact-active):hover::after {
   opacity: 1;
   transition: all 150ms ease-in 0s;
   transition-property: opacity, transform;
+}
+
+ul.sidebar-panel-nav
+  > li
+  a.encadrement-redirect:not(.router-link-exact-active):hover {
+  text-shadow: 2px 2px $yellow;
 }
 
 ul.sidebar-panel-nav > li.-selected > a:not(.router-link-exact-active)::after {
