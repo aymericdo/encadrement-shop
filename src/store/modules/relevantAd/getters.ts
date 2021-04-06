@@ -12,6 +12,19 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     const { currentPage } = state;
     return currentPage;
   },
+  getCurrentFilters(
+    state
+  ): {
+    surfaceValue: number[];
+    roomValue: number[];
+    priceValue: number[];
+    furnishedValue: string;
+    cityValue: string;
+    districtValues: never[];
+  } {
+    const { currentFilters } = state;
+    return currentFilters;
+  },
   getIsLoading(state): boolean {
     const { loading } = state;
     return loading;

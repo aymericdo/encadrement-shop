@@ -1,4 +1,9 @@
 <template>
+  <Dropfilters
+    class="dropfilters"
+    @onSubmit="changeFilters($event)"
+    :options="filtersOptions"
+  ></Dropfilters>
   <div class="list-page">
     <template v-for="ad of relevantAds" :key="ad._id">
       <div
@@ -9,14 +14,16 @@
         <div class="sub-card">
           <div class="content" @click="redirectTo(ad)">
             <div class="specs">
-              <div>
+              <div v-if="ad.roomCount">
                 {{ ad.roomCount }} pièce{{ ad.roomCount > 1 ? "s" : "" }}
               </div>
-              <div>{{ ad.surface }}m²</div>
-              <div>{{ ad.district }}</div>
+              <div v-if="ad.surface">{{ ad.surface }}m²</div>
+              <div class="location">
+                <span class="city">{{ ad.city }}</span> - {{ ad.district }}
+              </div>
               <div>{{ ad.price }}€</div>
               <div class="space"></div>
-              <span>{{ getDisplayableDate(ad.createdAt) }}</span>
+              <div class="date">{{ getDisplayableDate(ad.createdAt) }}</div>
             </div>
             <img
               class="image"
@@ -40,11 +47,13 @@
 </template>
 
 <script lang="ts">
+import Dropfilters from "@/components/Dropfilters.vue";
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
 import { computed, defineComponent, onMounted, onUnmounted } from "vue";
 import { HalfCircleSpinner } from "epic-spinners";
 import { useStore } from "vuex";
+import { RelevantAdMutationType } from "@/store/modules/relevantAd/mutation-types";
 
 const namespace = "relevantAd";
 
@@ -52,11 +61,15 @@ export default defineComponent({
   name: "ListPage",
   components: {
     HalfCircleSpinner,
+    Dropfilters,
   },
   setup() {
     const store = useStore();
 
     const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
+    const filtersOptions = computed(
+      () => store.getters[`${namespace}/getCurrentFilters`]
+    );
     const totalPages = computed(
       () => store.getters[`${namespace}/getTotalPages`]
     );
@@ -75,16 +88,23 @@ export default defineComponent({
         window.innerHeight + window.scrollY >= document.body.offsetHeight
       ) {
         store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.FetchRelevantAds}`,
-          { page: page.value }
+          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewPage}`,
+          {
+            page: page.value,
+            filters: filtersOptions.value,
+          }
         );
       }
     };
 
     onMounted(() => {
-      store.dispatch(`${namespace}/${RelevantAdActionTypes.FetchRelevantAds}`, {
-        page: page.value,
-      });
+      store.dispatch(
+        `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewPage}`,
+        {
+          page: page.value,
+          filters: filtersOptions.value,
+        }
+      );
       window.addEventListener("scroll", handleScroll);
     });
 
@@ -93,13 +113,31 @@ export default defineComponent({
     });
 
     return {
+      store,
       page,
       relevantAds,
       isLoading,
       totalPages,
+      filtersOptions,
     };
   },
   methods: {
+    changeFilters(filtersOptions: {
+      surfaceValue: number[];
+      roomValue: number[];
+      priceValue: number[];
+      furnishedValue: string;
+      cityValue: string;
+      districtValues: never[];
+    }) {
+      this.store.dispatch(
+        `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
+        {
+          page: 0,
+          filters: filtersOptions,
+        }
+      );
+    },
     getDisplayableDate(date: string): string {
       const d = new Date(date);
 
@@ -168,6 +206,10 @@ export default defineComponent({
   margin-top: 1em;
 }
 
+.dropfilters {
+  margin-left: 3.125rem;
+}
+
 .center {
   position: fixed;
   top: 50%;
@@ -221,6 +263,15 @@ export default defineComponent({
 
   & > .space {
     flex: 1;
+  }
+
+  & > .location > .city {
+    text-transform: capitalize;
+  }
+
+  & > .date {
+    display: flex;
+    justify-content: flex-end;
   }
 
   > div:not(:last-child) {

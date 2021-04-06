@@ -2,9 +2,9 @@
   <div class="about">
     <Menu></Menu>
     <div class="content">
-      <h1>Coucou</h1>
+      <h1>À propos</h1>
       <p>
-        On s'est dit qu'on n'allait pas s'arrêter un si bon chemin, alors pour
+        On s'est dit qu'on n'allait pas s'arrêter en si bon chemin, alors pour
         vous (et vos yeux ébahis), une page ENTIÈRE d'annonces complètement
         vérifiées par nos soins.
       </p>

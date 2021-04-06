@@ -5,5 +5,13 @@ export interface RelevantAdState {
   loading: boolean;
   error: boolean;
   currentPage: number;
+  currentFilters: {
+    surfaceValue: number[];
+    roomValue: number[];
+    priceValue: number[];
+    furnishedValue: string;
+    cityValue: string;
+    districtValues: never[];
+  };
   totalPages: number | null;
 }

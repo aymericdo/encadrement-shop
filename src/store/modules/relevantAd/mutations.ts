@@ -12,12 +12,20 @@ export const mutations: MutationTree<RelevantAdState> = {
     );
     state.relevantAdList = [...state.relevantAdList, ...uniqPayload];
   },
+  [RelevantAdMutationType.SetRelevantAds](state, payload: RelevantAd[]) {
+    state.error = false;
+    state.relevantAdList = [...payload];
+  },
   [RelevantAdMutationType.AddError](state) {
     state.error = true;
     state.relevantAdList = [];
   },
   [RelevantAdMutationType.IncrementPage](state) {
     state.currentPage += 1;
+  },
+  [RelevantAdMutationType.SetFilters](state, payload) {
+    state.currentPage = 0;
+    state.currentFilters = payload;
   },
   [RelevantAdMutationType.SetTotalPages](state, payload) {
     state.totalPages = payload;

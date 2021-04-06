@@ -9,7 +9,7 @@
     <Sidebar :isPanelOpen="isPanelOpen" @toggleClosing="togglingSidebar(false)">
       <ul class="sidebar-panel-nav">
         <li>
-          <router-link to="/">Accueil</router-link>
+          <router-link to="/">Sélection d'annonces conformes</router-link>
         </li>
         <li>
           <a class="encadrement-redirect" href="https://encadrement-loyers.fr"
@@ -119,6 +119,12 @@ ul.sidebar-panel-nav > li a:not(.router-link-exact-active):hover::after {
   opacity: 1;
   transition: all 150ms ease-in 0s;
   transition-property: opacity, transform;
+}
+
+ul.sidebar-panel-nav
+  > li
+  a.encadrement-redirect:not(.router-link-exact-active) {
+  text-shadow: 1px 1px $yellow;
 }
 
 ul.sidebar-panel-nav

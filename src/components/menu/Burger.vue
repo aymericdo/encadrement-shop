@@ -10,7 +10,7 @@
       <span class="burger-bar burger-bar--3"></span>
     </button>
     <slot>
-      <div class="logo">Menu</div>
+      <div class="logo">ShopEncadrement</div>
     </slot>
   </div>
 </template>

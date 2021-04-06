@@ -10,6 +10,14 @@ export const state: RelevantAdState = {
   loading: false,
   error: false,
   currentPage: 0,
+  currentFilters: {
+    surfaceValue: [9, 100],
+    roomValue: [1, 6],
+    priceValue: [200, 5000],
+    furnishedValue: "all",
+    cityValue: "all",
+    districtValues: [],
+  },
   totalPages: null,
 };
 

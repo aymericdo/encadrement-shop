@@ -1,3 +1,4 @@
 export enum RelevantAdActionTypes {
-  FetchRelevantAds = "FETCH_RELEVANT_ADS",
+  FetchRelevantAdsWithNewPage = "FETCH_RELEVANT_ADS_WITH_NEW_PAGE",
+  FetchRelevantAdsWithNewFilters = "FETCH_RELEVANT_ADS_WITH_NEW_FILTERS",
 }

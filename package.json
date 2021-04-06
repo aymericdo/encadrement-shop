@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vueform/slider": "github:vueform/slider",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "epic-spinners": "^1.1.0",
