@@ -25,6 +25,7 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
     }
   ) {
     const page = 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filters: any = payload.filters;
     commit(RelevantAdMutationType.SetFilters, filters);
 
@@ -72,6 +73,7 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
     }
   ) {
     const page = payload.page < 0 ? 0 : payload.page;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filters: any = payload.filters;
 
     const strOptions: string = Object.keys(filters)

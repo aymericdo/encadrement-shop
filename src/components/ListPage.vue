@@ -53,7 +53,6 @@ import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
 import { computed, defineComponent, onMounted, onUnmounted } from "vue";
 import { HalfCircleSpinner } from "epic-spinners";
 import { useStore } from "vuex";
-import { RelevantAdMutationType } from "@/store/modules/relevantAd/mutation-types";
 
 const namespace = "relevantAd";
 
@@ -199,11 +198,9 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .list-page {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
   margin-top: 1em;
+  grid-template-columns: repeat(3, 2fr);
 }
 
 .dropfilters {
@@ -218,9 +215,7 @@ export default defineComponent({
 }
 
 .card {
-  width: 33%;
-  height: 0;
-  padding-bottom: 33%;
+  padding-bottom: 100%;
   position: relative;
 }
 
@@ -288,9 +283,8 @@ export default defineComponent({
 }
 
 @media screen and (max-width: $mobileSize) {
-  .card {
-    width: 100%;
-    padding-bottom: 100%;
+  .list-page {
+    grid-template-columns: repeat(1, 2fr);
   }
 }
 </style>
