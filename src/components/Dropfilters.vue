@@ -208,8 +208,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
-
 .dropfilters {
   position: relative;
 }
@@ -269,13 +267,14 @@ export default defineComponent({
   display: flex;
   align-items: center;
   width: 100%;
-  height: 36px;
+  min-height: 36px;
   margin: 16px 0;
 }
 
 @media screen and (max-width: $mobileSize) {
   .option-list {
     width: 100%;
+    padding-right: 28px;
   }
 
   .option-list > .row {
@@ -283,16 +282,12 @@ export default defineComponent({
   }
 
   .option-list > .row > span.label {
-    margin-bottom: 36px;
+    font-weight: 500;
   }
 
   .option-list > .row > span {
     width: 100%;
   }
-}
-
-.option-list > .row > span.label {
-  min-width: 200px;
 }
 
 .option-list > .row > span {

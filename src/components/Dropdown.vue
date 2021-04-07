@@ -64,8 +64,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
-
 .dropdown {
   position: relative;
 }
@@ -138,11 +136,18 @@ export default defineComponent({
 .option {
   color: white;
   display: flex;
+  min-height: 36px;
   justify-content: center;
+  align-items: center;
   font-weight: 400;
   cursor: pointer;
   transition: all ease 0.3s;
   transition-property: background-color, color;
+  border-bottom: solid 1px white;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .option.-selected,
