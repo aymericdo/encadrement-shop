@@ -5,6 +5,9 @@ module.exports = {
     msTileColor: "#050505",
     appleMobileWebAppCapable: "yes",
     appleMobileWebAppStatusBarStyle: "black",
+    manifestOptions: {
+      background_color: "#fdcd56",
+    },
 
     workboxPluginMode: "GenerateSW",
     workboxOptions: {
