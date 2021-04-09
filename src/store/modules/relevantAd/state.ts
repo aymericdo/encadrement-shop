@@ -13,7 +13,7 @@ export const state: RelevantAdState = {
   currentFilters: {
     surfaceValue: [9, 100],
     roomValue: [1, 6],
-    priceValue: [200, 5000],
+    priceValue: [200, 3000],
     furnishedValue: "all",
     cityValue: "all",
     districtValues: [],

@@ -4,6 +4,13 @@
       <span>Filtres</span>
       <ArrowIcon class="arrow-icon" :class="{ '-is-open': isOpen }"></ArrowIcon>
     </button>
+    <button
+      class="mobile-back-btn"
+      :class="{ '-is-open': isOpen }"
+      @click="onOpen()"
+    >
+      <StrokeIcon></StrokeIcon>
+    </button>
     <transition name="slide-down">
       <div class="option-list" v-if="isOpen">
         <div class="row">
@@ -18,18 +25,19 @@
         </div>
         <div class="row">
           <span class="label">Prix</span>
-          <span>
+          <span class="slider">
             <Slider
               v-model="priceValue"
               :min="200"
-              :max="5000"
+              :max="3000"
+              :step="10"
               :format="{ suffix: '€', decimals: 0 }"
             />
           </span>
         </div>
         <div class="row">
           <span class="label">Surface</span>
-          <span>
+          <span class="slider">
             <Slider
               v-model="surfaceValue"
               :min="9"
@@ -40,7 +48,7 @@
         </div>
         <div class="row">
           <span class="label">Nombre de pièce(s)</span>
-          <span>
+          <span class="slider">
             <Slider
               v-model="roomValue"
               :min="1"
@@ -73,13 +81,14 @@
             </MultiDropdown>
           </span>
         </div>
-        <button class="submit-btn" @click="onSubmit">Filtrer</button>
+        <button class="submit-btn" @click="onSubmit">Go</button>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
+import StrokeIcon from "@/components/icons/StrokeIcon.vue";
 import ArrowIcon from "@/components/icons/ArrowIcon.vue";
 import Slider from "@vueform/slider";
 import Dropdown from "@/components/Dropdown.vue";
@@ -105,10 +114,13 @@ export default defineComponent({
       if (this.cityValue !== "all") {
         this.fetchDistricts();
       }
+
+      this.districtValues = [];
     },
   },
   components: {
     ArrowIcon,
+    StrokeIcon,
     Slider,
     Dropdown,
     MultiDropdown,
@@ -247,6 +259,14 @@ export default defineComponent({
   transition: transform ease 0.3s;
 }
 
+.arrow-icon.back {
+  transform: rotate(90deg);
+}
+
+.dropfilters > button.mobile-back-btn {
+  display: none;
+}
+
 .arrow-icon.-is-open {
   transform: rotate(180deg);
 }
@@ -271,27 +291,12 @@ export default defineComponent({
   margin: 16px 0;
 }
 
-@media screen and (max-width: $mobileSize) {
-  .option-list {
-    width: 100%;
-    padding-right: 28px;
-  }
-
-  .option-list > .row {
-    flex-direction: column;
-  }
-
-  .option-list > .row > span.label {
-    font-weight: 500;
-  }
-
-  .option-list > .row > span {
-    width: 100%;
-  }
+.option-list > .row > span:first-child {
+  width: 50%;
 }
 
-.option-list > .row > span {
-  flex: 1;
+.option-list > .row > span:last-child {
+  width: 70%;
 }
 
 .option-list > .row .dropdown {
@@ -312,6 +317,13 @@ export default defineComponent({
   color: $deepblack;
   border-color: $yellow;
   line-height: 16px;
+  top: 24px;
+  bottom: inherit;
+}
+
+.option-list > .row :deep(.slider-target .slider-tooltip::before) {
+  top: -10px;
+  transform: translate(-50%) rotate(180deg);
 }
 
 .submit-btn {
@@ -350,5 +362,49 @@ export default defineComponent({
 .slide-down-leave-active {
   transition: all ease 400ms;
   transition-property: opacity, transform;
+}
+
+@media screen and (max-width: $mobileSize) {
+  .dropfilters > button.mobile-back-btn.-is-open {
+    z-index: 3;
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    display: block;
+  }
+
+  .option-list {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    padding: 2rem;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    margin-top: 0;
+    border: none;
+    overflow-y: auto;
+  }
+
+  .option-list > .row {
+    flex-direction: column;
+  }
+
+  .option-list > .row > span.label {
+    font-weight: 500;
+  }
+
+  .option-list > .row > span:first-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .option-list > .row > span.slider {
+    margin-bottom: 1.5rem;
+  }
+
+  .option-list > .row > span:first-child,
+  .option-list > .row > span:last-child {
+    width: 100%;
+  }
 }
 </style>

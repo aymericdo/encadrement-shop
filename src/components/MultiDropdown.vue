@@ -9,7 +9,7 @@
       ></ArrowIcon>
     </button>
     <transition name="slide-down">
-      <div class="option-list" v-if="isOpen">
+      <div class="option-list" v-if="isOpen" ref="optionListRef">
         <div
           class="option"
           v-for="option in options"
@@ -27,24 +27,56 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref, watchEffect, onMounted, onUnmounted } from "vue";
 import ArrowIcon from "@/components/icons/ArrowIcon.vue";
 
 export default defineComponent({
   name: "MultiDropdown",
   props: ["options", "currentValues"],
-  data() {
+  setup(props) {
+    const optionListRef = ref(null);
+    const isOpen = ref(false);
+    const currentValuesDisplay = ref("");
+    let scrollIntoViewTimeout = null;
+
+    watchEffect(
+      () => {
+        if (!isOpen.value) {
+          clearTimeout(scrollIntoViewTimeout);
+        }
+
+        if (optionListRef.value && isOpen) {
+          scrollIntoViewTimeout = setTimeout(() => {
+            optionListRef.value.scrollIntoView({
+              behavior: "smooth",
+              block: "end",
+              inline: "end",
+            });
+          }, 800);
+        }
+      },
+      {
+        flush: "post",
+      }
+    );
+
+    onMounted(() => {
+      currentValuesDisplay.value =
+        props.options
+          .filter((opt) => props.currentValues.includes(opt.value))
+          .map((opt) => opt.label)
+          .join(", ") || "Tout";
+    });
+
+    onUnmounted(() => {
+      clearTimeout(scrollIntoViewTimeout);
+    });
+
     return {
-      isOpen: false,
-      currentValuesDisplay: "",
+      optionListRef,
+      isOpen,
+      currentValuesDisplay,
     };
-  },
-  mounted: function () {
-    this.currentValuesDisplay =
-      this.options
-        .filter((opt) => this.currentValues.includes(opt.value))
-        .map((opt) => opt.label)
-        .join(", ") || "Tout";
   },
   watch: {
     currentValues: function () {
@@ -77,7 +109,6 @@ export default defineComponent({
 .multi-dropdown > button {
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: $yellow;
   font-weight: 600;
@@ -89,7 +120,7 @@ export default defineComponent({
   transition: background-color ease 0.3s;
 
   &:hover {
-    border: solid $deepblack 2px;
+    border: solid $deepblack 1px;
   }
 }
 
@@ -102,11 +133,14 @@ export default defineComponent({
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 180px;
+  max-width: 100%;
+  width: 100%;
+  padding-right: 1em;
 }
 
 .arrow-icon {
-  margin-left: 4px;
+  position: absolute;
+  right: 14px;
   transition: transform ease 0.3s;
 }
 
@@ -133,23 +167,24 @@ export default defineComponent({
   width: 100%;
   top: 100%;
   margin-top: 4px;
-  background-color: $deepblack;
+  background-color: white;
+  color: $deepblack;
   border-radius: 4px;
   border: 1px solid $deepblack;
   z-index: 2;
 }
 
 .option {
-  color: white;
   display: flex;
   min-height: 36px;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-left: 1em;
   font-weight: 400;
   cursor: pointer;
   transition: all ease 0.3s;
   transition-property: background-color, color;
-  border-bottom: solid 1px white;
+  border-bottom: solid 1px $deepblack;
 
   &:last-child {
     border-bottom: none;
@@ -158,7 +193,11 @@ export default defineComponent({
 
 .option.-selected,
 .option:hover {
-  color: $yellow;
+  background-color: $yellow;
+}
+
+.option.-selected {
+  font-weight: 500;
 }
 
 .slide-down-enter-from,
