@@ -109,10 +109,12 @@ export default defineComponent({
 .multi-dropdown > button {
   cursor: pointer;
   display: flex;
+  position: relative;
   align-items: center;
   background-color: $yellow;
   font-weight: 600;
   height: 36px;
+  width: 100%;
   border-radius: 4px;
   font-size: 20px;
   padding: 6px 12px;
@@ -120,12 +122,11 @@ export default defineComponent({
   transition: background-color ease 0.3s;
 
   &:hover {
-    border: solid $deepblack 1px;
+    box-shadow: 0 0 0 1px $deepblack;
   }
 }
 
 .multi-dropdown > button.-is-open {
-  border: solid $deepblack 2px;
   z-index: 2;
 }
 

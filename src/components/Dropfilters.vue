@@ -1,6 +1,10 @@
 <template>
   <div class="dropfilters">
-    <button @click="onOpen()" :class="{ '-is-open': isOpen }">
+    <button
+      class="dropdown-btn"
+      @click="onOpen()"
+      :class="{ '-is-open': isOpen }"
+    >
       <span>Filtres</span>
       <ArrowIcon class="arrow-icon" :class="{ '-is-open': isOpen }"></ArrowIcon>
     </button>
@@ -243,6 +247,10 @@ export default defineComponent({
   }
 }
 
+.dropfilters > button.dropdown-btn {
+  width: 100%;
+}
+
 .dropfilters > button.-is-open {
   border: solid $deepblack 2px;
 }
@@ -251,7 +259,6 @@ export default defineComponent({
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 180px;
 }
 
 .arrow-icon {
@@ -259,16 +266,12 @@ export default defineComponent({
   transition: transform ease 0.3s;
 }
 
-.arrow-icon.back {
-  transform: rotate(90deg);
+.arrow-icon.-is-open {
+  transform: rotate(180deg);
 }
 
 .dropfilters > button.mobile-back-btn {
   display: none;
-}
-
-.arrow-icon.-is-open {
-  transform: rotate(180deg);
 }
 
 .option-list {
