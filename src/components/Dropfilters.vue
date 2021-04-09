@@ -22,8 +22,8 @@
           <span>
             <Dropdown
               :options="cityDropdownOptions"
-              :currentValue="cityValue"
-              @onSelect="cityValue = $event.value"
+              :currentValue="optionValues.cityValue"
+              @onSelect="optionValues.cityValue = $event.value"
             ></Dropdown>
           </span>
         </div>
@@ -31,7 +31,7 @@
           <span class="label">Prix</span>
           <span class="slider">
             <Slider
-              v-model="priceValue"
+              v-model="optionValues.priceValue"
               :min="200"
               :max="3000"
               :step="10"
@@ -43,7 +43,7 @@
           <span class="label">Surface</span>
           <span class="slider">
             <Slider
-              v-model="surfaceValue"
+              v-model="optionValues.surfaceValue"
               :min="9"
               :max="100"
               :format="{ suffix: 'm²', decimals: 0 }"
@@ -54,7 +54,7 @@
           <span class="label">Nombre de pièce(s)</span>
           <span class="slider">
             <Slider
-              v-model="roomValue"
+              v-model="optionValues.roomValue"
               :min="1"
               :max="6"
               :format="roomValueFct"
@@ -67,25 +67,28 @@
             <Dropdown
               class="dropdown"
               :options="furnishedDropdownOptions"
-              :currentValue="furnishedValue"
-              @onSelect="furnishedValue = $event.value"
+              :currentValue="optionValues.furnishedValue"
+              @onSelect="optionValues.furnishedValue = $event.value"
             >
             </Dropdown>
           </span>
         </div>
-        <div class="row" v-if="cityValue !== 'all'">
+        <div class="row" v-if="optionValues.cityValue !== 'all'">
           <span class="label">Localisation</span>
           <span>
             <MultiDropdown
               class="dropdown"
               :options="districtDropdownOptions"
-              :currentValues="districtValues"
+              :currentValues="optionValues.districtValues"
               @onSelect="districtValuesChanged($event)"
             >
             </MultiDropdown>
           </span>
         </div>
-        <button class="submit-btn" @click="onSubmit">Go</button>
+        <div class="row actions-btn">
+          <button class="reset-btn" @click="onReset">Reset</button>
+          <button class="submit-btn" @click="onSubmit">Go</button>
+        </div>
       </div>
     </transition>
   </div>
@@ -98,7 +101,7 @@ import Slider from "@vueform/slider";
 import Dropdown from "@/components/Dropdown.vue";
 import MultiDropdown from "@/components/MultiDropdown.vue";
 import { domain } from "@/helper/config";
-import { defineComponent } from "vue";
+import { defineComponent, ref, toRefs, watchEffect } from "vue";
 
 import "@vueform/slider/themes/default.css";
 
@@ -113,15 +116,6 @@ export default defineComponent({
   beforeUnmount: function () {
     this.controller.abort();
   },
-  watch: {
-    cityValue: function () {
-      if (this.cityValue !== "all") {
-        this.fetchDistricts();
-      }
-
-      this.districtValues = [];
-    },
-  },
   components: {
     ArrowIcon,
     StrokeIcon,
@@ -129,11 +123,52 @@ export default defineComponent({
     Dropdown,
     MultiDropdown,
   },
-  data() {
+  setup(props) {
+    const { options } = toRefs(props);
+    const controller = new AbortController();
+    const districtDropdownOptions = ref([]);
+
+    const fetchDistricts = () => {
+      fetch(`${domain}stats/district-list/${options.value.cityValue}`, {
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.message === "token expired") {
+            throw res;
+          } else {
+            return res;
+          }
+        })
+        .then((res) => {
+          districtDropdownOptions.value = res.map((district) => ({
+            value: district,
+            label: district,
+          }));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
+    watchEffect(
+      () => {
+        if (options.value.cityValue) {
+          if (options.value.cityValue !== "all") {
+            fetchDistricts();
+          }
+          options.districtValues = [];
+        }
+      },
+      {
+        flush: "post",
+      }
+    );
+
     return {
-      controller: new AbortController(),
-      isOpen: false,
-      cityValue: this.options.cityValue,
+      controller,
+      isOpen: ref(false),
+      optionValues: options,
       cityDropdownOptions: [
         {
           value: "all",
@@ -148,9 +183,6 @@ export default defineComponent({
           label: "Lille",
         },
       ],
-      surfaceValue: this.options.surfaceValue,
-      roomValue: this.options.roomValue,
-      priceValue: this.options.priceValue,
       furnishedDropdownOptions: [
         {
           value: "all",
@@ -165,9 +197,7 @@ export default defineComponent({
           label: "Non meublé",
         },
       ],
-      furnishedValue: this.options.furnishedValue,
-      districtDropdownOptions: [],
-      districtValues: this.options.districtValues,
+      districtDropdownOptions,
     };
   },
   methods: {
@@ -177,47 +207,34 @@ export default defineComponent({
     onSubmit: function () {
       this.isOpen = false;
       this.$emit("onSubmit", {
-        districtValues: this.districtValues,
-        cityValue: this.cityValue,
-        furnishedValue: this.furnishedValue,
-        surfaceValue: this.surfaceValue,
-        roomValue: this.roomValue,
-        priceValue: this.priceValue,
+        districtValues: this.optionValues.districtValues,
+        cityValue: this.optionValues.cityValue,
+        furnishedValue: this.optionValues.furnishedValue,
+        surfaceValue: this.optionValues.surfaceValue,
+        roomValue: this.optionValues.roomValue,
+        priceValue: this.optionValues.priceValue,
       });
+    },
+    onReset: function () {
+      this.isOpen = false;
+      this.$emit("onReset");
     },
     roomValueFct: function (value) {
       return `${value} pièce${value > 1 ? "s" : ""}`;
     },
     districtValuesChanged: function (opt) {
-      if (this.districtValues.some((value) => value === opt.value)) {
-        this.districtValues = this.districtValues.filter(
+      if (
+        this.optionValues.districtValues.some((value) => value === opt.value)
+      ) {
+        this.optionValues.districtValues = this.optionValues.districtValues.filter(
           (value) => value !== opt.value
         );
       } else {
-        this.districtValues = [...this.districtValues, opt.value];
+        this.optionValues.districtValues = [
+          ...this.optionValues.districtValues,
+          opt.value,
+        ];
       }
-    },
-    fetchDistricts: function () {
-      fetch(`${domain}stats/district-list/${this.cityValue}`, {
-        signal: this.controller.signal,
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.message === "token expired") {
-            throw res;
-          } else {
-            return res;
-          }
-        })
-        .then((res) => {
-          this.districtDropdownOptions = res.map((district) => ({
-            value: district,
-            label: district,
-          }));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
     },
   },
 });
@@ -242,8 +259,10 @@ export default defineComponent({
   border-color: transparent;
   transition: background-color ease 0.3s;
 
-  &:hover {
-    border: solid $deepblack 2px;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border: solid $deepblack 2px;
+    }
   }
 }
 
@@ -329,6 +348,35 @@ export default defineComponent({
   transform: translate(-50%) rotate(180deg);
 }
 
+.row.actions-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reset-btn {
+  display: flex;
+  align-self: flex-end;
+  color: white;
+  display: flex;
+  justify-content: center;
+  font-weight: 400;
+  background-color: $lightgrey;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-color: transparent;
+  transition: background-color ease 0.3s;
+  margin-right: 0.875rem;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border: solid $deepblack 2px;
+    }
+  }
+}
+
 .submit-btn {
   display: flex;
   align-self: flex-end;
@@ -344,15 +392,12 @@ export default defineComponent({
   padding: 6px 12px;
   border-color: transparent;
   transition: background-color ease 0.3s;
-  float: right;
 
-  &:hover {
-    border: solid $deepblack 2px;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border: solid $deepblack 2px;
+    }
   }
-}
-
-.option:hover {
-  color: $yellow;
 }
 
 .slide-down-enter-from,
@@ -389,7 +434,7 @@ export default defineComponent({
     overflow-y: auto;
   }
 
-  .option-list > .row {
+  .option-list > .row:not(.actions-btn) {
     flex-direction: column;
   }
 

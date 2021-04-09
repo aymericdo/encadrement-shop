@@ -2,6 +2,7 @@
   <Dropfilters
     class="dropfilters"
     @onSubmit="changeFilters($event)"
+    @onReset="changeFilters(null)"
     :options="filtersOptions"
   ></Dropfilters>
   <div class="list-page">
@@ -53,6 +54,7 @@ import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
 import { computed, defineComponent, onMounted, onUnmounted } from "vue";
 import { HalfCircleSpinner } from "epic-spinners";
 import { useStore } from "vuex";
+import { initialFilters } from "@/store/modules/relevantAd/state";
 
 const namespace = "relevantAd";
 
@@ -121,7 +123,7 @@ export default defineComponent({
     };
   },
   methods: {
-    changeFilters(filtersOptions: {
+    changeFilters(filtersOptions?: {
       surfaceValue: number[];
       roomValue: number[];
       priceValue: number[];
@@ -129,13 +131,23 @@ export default defineComponent({
       cityValue: string;
       districtValues: never[];
     }) {
-      this.store.dispatch(
-        `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
-        {
-          page: 0,
-          filters: filtersOptions,
-        }
-      );
+      if (filtersOptions) {
+        this.store.dispatch(
+          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
+          {
+            page: 0,
+            filters: filtersOptions,
+          }
+        );
+      } else {
+        this.store.dispatch(
+          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
+          {
+            page: 0,
+            filters: initialFilters,
+          }
+        );
+      }
     },
     getDisplayableDate(date: string): string {
       const d = new Date(date);
@@ -205,6 +217,7 @@ export default defineComponent({
 
 .dropfilters {
   margin-left: 3.125rem;
+  max-width: 150px;
 }
 
 .center {

@@ -5,18 +5,22 @@ import { mutations } from "./mutations";
 import { RelevantAdState } from "./state-types";
 import { RootState } from "@/store/types";
 
+export const initialFilters = {
+  surfaceValue: [9, 100],
+  roomValue: [1, 6],
+  priceValue: [200, 3000],
+  furnishedValue: "all",
+  cityValue: "all",
+  districtValues: [],
+};
+
 export const state: RelevantAdState = {
   relevantAdList: [],
   loading: false,
   error: false,
   currentPage: 0,
   currentFilters: {
-    surfaceValue: [9, 100],
-    roomValue: [1, 6],
-    priceValue: [200, 3000],
-    furnishedValue: "all",
-    cityValue: "all",
-    districtValues: [],
+    ...initialFilters,
   },
   totalPages: null,
 };

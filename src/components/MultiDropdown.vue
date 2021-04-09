@@ -120,10 +120,6 @@ export default defineComponent({
   padding: 6px 12px;
   border-color: transparent;
   transition: background-color ease 0.3s;
-
-  &:hover {
-    box-shadow: 0 0 0 1px $deepblack;
-  }
 }
 
 .multi-dropdown > button.-is-open {
@@ -193,7 +189,7 @@ export default defineComponent({
 }
 
 .option.-selected,
-.option:hover {
+.option:active {
   background-color: $yellow;
 }
 
@@ -211,5 +207,15 @@ export default defineComponent({
 .slide-down-leave-active {
   transition: all ease 400ms;
   transition-property: opacity, transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dropdown > button:hover {
+    box-shadow: 0 0 0 1px $deepblack;
+  }
+
+  .option:hover {
+    background-color: $yellow;
+  }
 }
 </style>
