@@ -1,8 +1,8 @@
 module.exports = {
   pwa: {
     name: "Encadrement - Shop",
-    themeColor: "#4DBA87",
-    msTileColor: "#000000",
+    themeColor: "#fdcd56",
+    msTileColor: "#050505",
     appleMobileWebAppCapable: "yes",
     appleMobileWebAppStatusBarStyle: "black",
 
