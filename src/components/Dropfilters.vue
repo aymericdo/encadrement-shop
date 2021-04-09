@@ -292,7 +292,7 @@ export default defineComponent({
 }
 
 .option-list > .row > span:first-child {
-  width: 50%;
+  width: 30%;
 }
 
 .option-list > .row > span:last-child {
