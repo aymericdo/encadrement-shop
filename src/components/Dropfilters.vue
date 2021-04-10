@@ -104,7 +104,7 @@ import Slider from "@vueform/slider";
 import Dropdown from "@/components/Dropdown.vue";
 import MultiDropdown from "@/components/MultiDropdown.vue";
 import { domain } from "@/helper/config";
-import { defineComponent, ref, toRefs } from "vue";
+import { defineComponent, ref, toRefs, watch } from "vue";
 
 import "@vueform/slider/themes/default.css";
 
@@ -134,10 +134,19 @@ export default defineComponent({
     const controller = new AbortController();
     const districtDropdownOptions = ref([]);
 
+    const optionValues = ref({ ...options.value });
+
+    watch(
+      () => props.options,
+      (newValue) => {
+        optionValues.value = newValue;
+      }
+    );
+
     return {
       controller,
       isOpen: ref(false),
-      optionValues: ref(options.value),
+      optionValues,
       cityDropdownOptions: [
         {
           value: "all",
