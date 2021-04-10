@@ -4,6 +4,7 @@
     @onSubmit="changeFilters($event)"
     @onReset="changeFilters(null)"
     :options="filtersOptions"
+    :filtersCount="filtersCount"
   ></Dropfilters>
   <div class="list-page">
     <template v-for="ad of relevantAds" :key="ad._id">
@@ -74,8 +75,13 @@ export default defineComponent({
     const totalPages = computed(
       () => store.getters[`${namespace}/getTotalPages`]
     );
+
     const isLoading = computed(
       () => store.getters[`${namespace}/getIsLoading`]
+    );
+
+    const filtersCount = computed(
+      () => store.getters[`${namespace}/getFiltersCount`]
     );
 
     const relevantAds = computed(
@@ -118,6 +124,7 @@ export default defineComponent({
       page,
       relevantAds,
       isLoading,
+      filtersCount,
       totalPages,
       filtersOptions,
     };

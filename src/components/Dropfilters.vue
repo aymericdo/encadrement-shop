@@ -6,6 +6,7 @@
       :class="{ '-is-open': isOpen }"
     >
       <span>Filtres</span>
+      <span class="badge-count">{{ filtersCount }}</span>
       <ArrowIcon class="arrow-icon" :class="{ '-is-open': isOpen }"></ArrowIcon>
     </button>
     <button
@@ -111,6 +112,9 @@ export default defineComponent({
     options: {
       type: Object,
       required: true,
+    },
+    filtersCount: {
+      type: Number,
     },
   },
   beforeUnmount: function () {
@@ -268,6 +272,17 @@ export default defineComponent({
 
 .dropfilters > button.dropdown-btn {
   width: 100%;
+}
+
+.dropfilters > button.dropdown-btn > .badge-count {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  border-radius: 50%;
+  background-color: $deepblack;
+  color: white;
+  width: 24px;
+  height: 24px;
 }
 
 .dropfilters > button.-is-open {
