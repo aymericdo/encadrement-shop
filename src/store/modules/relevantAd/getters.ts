@@ -24,7 +24,7 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     districtValues: never[];
   } {
     const { currentFilters } = state;
-    return currentFilters;
+    return { ...currentFilters };
   },
   getIsLoading(state): boolean {
     const { loading } = state;

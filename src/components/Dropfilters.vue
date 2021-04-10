@@ -6,7 +6,9 @@
       :class="{ '-is-open': isOpen }"
     >
       <span>Filtres</span>
-      <span class="badge-count">{{ filtersCount }}</span>
+      <span v-if="filtersCount > 0" class="badge-count">{{
+        filtersCount
+      }}</span>
       <ArrowIcon class="arrow-icon" :class="{ '-is-open': isOpen }"></ArrowIcon>
     </button>
     <button
@@ -24,7 +26,7 @@
             <Dropdown
               :options="cityDropdownOptions"
               :currentValue="optionValues.cityValue"
-              @onSelect="optionValues.cityValue = $event.value"
+              @onSelect="onCityChange"
             ></Dropdown>
           </span>
         </div>
@@ -102,7 +104,7 @@ import Slider from "@vueform/slider";
 import Dropdown from "@/components/Dropdown.vue";
 import MultiDropdown from "@/components/MultiDropdown.vue";
 import { domain } from "@/helper/config";
-import { defineComponent, ref, toRefs, watchEffect } from "vue";
+import { defineComponent, ref, toRefs } from "vue";
 
 import "@vueform/slider/themes/default.css";
 
@@ -132,47 +134,10 @@ export default defineComponent({
     const controller = new AbortController();
     const districtDropdownOptions = ref([]);
 
-    const fetchDistricts = () => {
-      fetch(`${domain}stats/district-list/${options.value.cityValue}`, {
-        signal: controller.signal,
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.message === "token expired") {
-            throw res;
-          } else {
-            return res;
-          }
-        })
-        .then((res) => {
-          districtDropdownOptions.value = res.map((district) => ({
-            value: district,
-            label: district,
-          }));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
-
-    watchEffect(
-      () => {
-        if (options.value.cityValue) {
-          if (options.value.cityValue !== "all") {
-            fetchDistricts();
-          }
-          options.districtValues = [];
-        }
-      },
-      {
-        flush: "post",
-      }
-    );
-
     return {
       controller,
       isOpen: ref(false),
-      optionValues: options,
+      optionValues: ref(options.value),
       cityDropdownOptions: [
         {
           value: "all",
@@ -208,6 +173,16 @@ export default defineComponent({
     onOpen: function () {
       this.isOpen = !this.isOpen;
     },
+    onCityChange: function (event) {
+      this.optionValues.cityValue = event.value;
+
+      if (this.optionValues.cityValue) {
+        if (this.optionValues.cityValue !== "all") {
+          this.fetchDistricts();
+        }
+        this.optionValues.districtValues = [];
+      }
+    },
     onSubmit: function () {
       this.isOpen = false;
       this.$emit("onSubmit", {
@@ -239,6 +214,28 @@ export default defineComponent({
           opt.value,
         ];
       }
+    },
+    fetchDistricts: function () {
+      fetch(`${domain}stats/district-list/${this.optionValues.cityValue}`, {
+        signal: this.controller.signal,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.message === "token expired") {
+            throw res;
+          } else {
+            return res;
+          }
+        })
+        .then((res) => {
+          this.districtDropdownOptions = res.map((district) => ({
+            value: district,
+            label: district,
+          }));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
   },
 });
