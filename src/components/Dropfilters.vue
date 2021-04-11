@@ -210,22 +210,47 @@ export default defineComponent({
     roomValueFct: function (value) {
       return `${value} pièce${value > 1 ? "s" : ""}`;
     },
-    districtValuesChanged: function (opt) {
-      if (
-        this.optionValues.districtValues.some((value) => value === opt.value)
-      ) {
-        this.optionValues.districtValues = this.optionValues.districtValues.filter(
-          (value) => value !== opt.value
-        );
+    districtValuesChanged: function (opts) {
+      if (opts.length < 2) {
+        const opt = opts[0];
+        if (
+          this.optionValues.districtValues.some((value) => value === opt.value)
+        ) {
+          this.optionValues.districtValues = this.optionValues.districtValues.filter(
+            (value) => value !== opt.value
+          );
+        } else {
+          this.optionValues.districtValues = [
+            ...this.optionValues.districtValues,
+            opt.value,
+          ];
+        }
       } else {
-        this.optionValues.districtValues = [
-          ...this.optionValues.districtValues,
-          opt.value,
-        ];
+        if (
+          opts.every((opt) =>
+            this.optionValues.districtValues.some(
+              (value) => value === opt.value
+            )
+          )
+        ) {
+          this.optionValues.districtValues = this.optionValues.districtValues.filter(
+            (value) => !opts.map((o) => o.value).includes(value)
+          );
+        } else {
+          this.optionValues.districtValues = [
+            ...this.optionValues.districtValues,
+            ...opts
+              .map((o) => o.value)
+              .filter(
+                (v) =>
+                  !this.optionValues.districtValues.some((value) => value === v)
+              ),
+          ];
+        }
       }
     },
     fetchDistricts: function () {
-      fetch(`${domain}stats/district-list/${this.optionValues.cityValue}`, {
+      fetch(`${domain}districts/list/${this.optionValues.cityValue}`, {
         signal: this.controller.signal,
       })
         .then((res) => res.json())
@@ -238,8 +263,9 @@ export default defineComponent({
         })
         .then((res) => {
           this.districtDropdownOptions = res.map((district) => ({
-            value: district,
-            label: district,
+            groupBy: district.groupBy,
+            value: district.value,
+            label: district.value,
           }));
         })
         .catch((err) => {
