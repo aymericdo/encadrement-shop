@@ -159,13 +159,30 @@ export default defineComponent({
     getDisplayableDate(date: string): string {
       const d = new Date(date);
 
+      const todayDate = new Date();
+      const todayDateFormatted = todayDate.toLocaleDateString();
+      const yesterdayDate = new Date();
+      yesterdayDate.setDate(todayDate.getDate() - 1);
+      const yesterdayDateFormatted = yesterdayDate.toLocaleDateString();
+      const dayBeforeYesterdayDate = new Date();
+      dayBeforeYesterdayDate.setDate(yesterdayDate.getDate() - 1);
+      const dayBeforeYesterdayDateFormatted = yesterdayDate.toLocaleDateString();
+
       const dateFormat = d.toLocaleDateString();
       const timeFormat = d.toLocaleTimeString(navigator.language, {
         hour: "2-digit",
         minute: "2-digit",
       });
 
-      return `Vu le ${dateFormat} à ${timeFormat}`;
+      return `Vu ${
+        dateFormat === todayDateFormatted
+          ? "aujourd'hui"
+          : dateFormat === yesterdayDateFormatted
+          ? "hier"
+          : dateFormat === dayBeforeYesterdayDateFormatted
+          ? "avant-hier"
+          : "le " + dateFormat
+      } à ${timeFormat}`;
     },
     redirectTo(ad: RelevantAd): void {
       window.open(this.getUrl(ad.website, ad.id, ad.url), "_blank");
