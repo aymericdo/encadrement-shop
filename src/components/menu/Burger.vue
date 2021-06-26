@@ -119,6 +119,7 @@ button:focus {
   display: flex;
   cursor: pointer;
   position: absolute;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 #burger.fixed {
