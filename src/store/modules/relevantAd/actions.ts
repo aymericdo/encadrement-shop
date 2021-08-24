@@ -19,6 +19,7 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
         roomValue: number[];
         furnishedValue: string;
         cityValue: string;
+        isHouseValue: string;
         districtValues: string[];
         priceValue: number[];
       };

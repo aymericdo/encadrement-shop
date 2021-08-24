@@ -136,6 +136,7 @@ export default defineComponent({
       priceValue: number[];
       furnishedValue: string;
       cityValue: string;
+      isHouseValue: string;
       districtValues: never[];
     }) {
       if (filtersOptions) {

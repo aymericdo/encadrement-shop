@@ -6,6 +6,7 @@ export interface FilterState {
   priceValue: number[];
   furnishedValue: string;
   cityValue: string;
+  isHouseValue: number | null;
   districtValues: never[];
 }
 

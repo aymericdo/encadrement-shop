@@ -11,6 +11,7 @@ export const initialFilters = {
   priceValue: [200, 3000],
   furnishedValue: "all",
   cityValue: "all",
+  isHouseValue: null,
   districtValues: [],
 };
 

@@ -10,4 +10,5 @@ export interface RelevantAd {
   district: string;
   city: string;
   url: string;
+  isHouse?: boolean;
 }

@@ -30,6 +30,18 @@
             ></Dropdown>
           </span>
         </div>
+        <div v-if="hasHouse" class="row">
+          <span class="label">Maison</span>
+          <span>
+            <Dropdown
+              class="dropdown"
+              :options="isHouseValueDropdownOptions"
+              :currentValue="optionValues.isHouseValue"
+              @onSelect="optionValues.isHouseValue = $event.value"
+            >
+            </Dropdown>
+          </span>
+        </div>
         <div class="row">
           <span class="label">Prix</span>
           <span class="slider">
@@ -133,6 +145,7 @@ export default defineComponent({
     const { options } = toRefs(props);
     const controller = new AbortController();
     const districtDropdownOptions = ref([]);
+    const hasHouse = ref(false);
 
     const optionValues = ref({ ...options.value });
 
@@ -160,6 +173,11 @@ export default defineComponent({
           value: "lille",
           label: "Lille",
         },
+        {
+          value: "plaine_commune",
+          label: "Plaine Commune",
+          hasHouse: true,
+        },
       ],
       furnishedDropdownOptions: [
         {
@@ -175,6 +193,21 @@ export default defineComponent({
           label: "Non meublé",
         },
       ],
+      isHouseValueDropdownOptions: [
+        {
+          value: null,
+          label: "Tout",
+        },
+        {
+          value: 1,
+          label: "Maison",
+        },
+        {
+          value: 0,
+          label: "Appartement",
+        },
+      ],
+      hasHouse,
       districtDropdownOptions,
     };
   },
@@ -184,6 +217,13 @@ export default defineComponent({
     },
     onCityChange: function (event) {
       this.optionValues.cityValue = event.value;
+      this.hasHouse = !!this.cityDropdownOptions.find(
+        (c) => c.value === this.optionValues.cityValue
+      )?.hasHouse;
+
+      if (!this.hasHouse) {
+        this.optionValues.isHouseValue = null;
+      }
 
       if (this.optionValues.cityValue) {
         if (this.optionValues.cityValue !== "all") {
@@ -201,6 +241,7 @@ export default defineComponent({
         surfaceValue: this.optionValues.surfaceValue,
         roomValue: this.optionValues.roomValue,
         priceValue: this.optionValues.priceValue,
+        isHouseValue: this.optionValues.isHouseValue,
       });
     },
     onReset: function () {
@@ -407,7 +448,8 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   font-weight: 400;
-  background-color: $lightgrey;
+  background-color: white;
+  color: $deepblack;
   cursor: pointer;
   font-weight: 600;
   border-radius: 4px;
