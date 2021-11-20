@@ -178,6 +178,10 @@ export default defineComponent({
           label: "Plaine Commune",
           hasHouse: true,
         },
+        {
+          value: "lyon",
+          label: "Lyon",
+        },
       ],
       furnishedDropdownOptions: [
         {
