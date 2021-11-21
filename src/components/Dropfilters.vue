@@ -88,7 +88,10 @@
             </Dropdown>
           </span>
         </div>
-        <div class="row" v-if="optionValues.cityValue !== 'all'">
+        <div
+          class="row"
+          v-if="optionValues.cityValue !== 'all' && optionValues.districtValues"
+        >
           <span class="label">Localisation</span>
           <span>
             <MultiDropdown
@@ -149,10 +152,43 @@ export default defineComponent({
 
     const optionValues = ref({ ...options.value });
 
+    const fetchDistricts = () => {
+      fetch(`${domain}districts/list/${optionValues.value.cityValue}`, {
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.message === "token expired") {
+            throw res;
+          } else {
+            return res;
+          }
+        })
+        .then((res) => {
+          districtDropdownOptions.value = res.map((district) => ({
+            groupBy: district.groupBy,
+            value: district.value,
+            label: district.value,
+          }));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
     watch(
       () => props.options,
       (newValue) => {
         optionValues.value = newValue;
+
+        console.log(newValue.cityValue);
+        if (newValue.cityValue !== "all") {
+          optionValues.value = {
+            ...optionValues.value,
+            districtValues: optionValues.value.districtValues || [],
+          };
+          fetchDistricts();
+        }
       }
     );
 
@@ -214,14 +250,6 @@ export default defineComponent({
       hasHouse,
       districtDropdownOptions,
     };
-  },
-  mounted: function () {
-    if (this.optionValues.cityValue) {
-      if (this.optionValues.cityValue !== "all") {
-        this.fetchDistricts();
-      }
-      this.optionValues.districtValues = [];
-    }
   },
   methods: {
     onOpen: function () {
