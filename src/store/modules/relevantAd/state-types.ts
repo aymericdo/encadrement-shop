@@ -8,6 +8,7 @@ export interface FilterState {
   cityValue: string;
   isHouseValue: number | null;
   districtValues: never[];
+  isLegal: boolean;
 }
 
 export interface RelevantAdState {
@@ -15,6 +16,7 @@ export interface RelevantAdState {
   loading: boolean;
   error: boolean;
   currentPage: number;
+  initialFilters: FilterState;
   currentFilters: FilterState;
   totalPages: number | null;
 }

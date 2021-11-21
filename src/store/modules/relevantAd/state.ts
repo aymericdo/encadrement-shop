@@ -12,6 +12,7 @@ export const initialFilters = {
   furnishedValue: "all",
   cityValue: "all",
   isHouseValue: null,
+  isLegal: true,
   districtValues: [],
 };
 
@@ -20,6 +21,7 @@ export const state: RelevantAdState = {
   loading: false,
   error: false,
   currentPage: 0,
+  initialFilters,
   currentFilters: {
     ...initialFilters,
   },

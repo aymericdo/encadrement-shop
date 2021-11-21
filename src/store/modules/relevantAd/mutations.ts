@@ -36,4 +36,24 @@ export const mutations: MutationTree<RelevantAdState> = {
   [RelevantAdMutationType.StopLoading](state) {
     state.loading = false;
   },
+  [RelevantAdMutationType.SetDarkMode](state) {
+    state.initialFilters = {
+      ...state.initialFilters,
+      isLegal: false,
+    };
+    state.currentFilters = {
+      ...state.currentFilters,
+      isLegal: false,
+    };
+  },
+  [RelevantAdMutationType.SetDefaultFilter](state, payload) {
+    state.initialFilters = {
+      ...payload,
+      isLegal: state.initialFilters.isLegal,
+    };
+    state.currentFilters = {
+      ...payload,
+      isLegal: state.currentFilters.isLegal,
+    };
+  },
 };

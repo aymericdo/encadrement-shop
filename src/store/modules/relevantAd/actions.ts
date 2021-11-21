@@ -1,6 +1,6 @@
 import { ActionTree } from "vuex";
 import axios from "axios";
-import { RelevantAdState } from "./state-types";
+import { FilterState, RelevantAdState } from "./state-types";
 import { domain } from "@/helper/config";
 import { RelevantAdActionTypes } from "./action-types";
 import { RelevantAdMutationType } from "./mutation-types";
@@ -106,5 +106,14 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
       commit(RelevantAdMutationType.AddError);
       commit(RelevantAdMutationType.StopLoading);
     }
+  },
+  async [RelevantAdActionTypes.SetDarkMode]({ commit }) {
+    commit(RelevantAdMutationType.SetDarkMode);
+  },
+  async [RelevantAdActionTypes.SetDefaultFilter](
+    { commit },
+    payload: FilterState
+  ) {
+    commit(RelevantAdMutationType.SetDefaultFilter, payload);
   },
 };

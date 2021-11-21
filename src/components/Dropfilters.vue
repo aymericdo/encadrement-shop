@@ -215,6 +215,14 @@ export default defineComponent({
       districtDropdownOptions,
     };
   },
+  mounted: function () {
+    if (this.optionValues.cityValue) {
+      if (this.optionValues.cityValue !== "all") {
+        this.fetchDistricts();
+      }
+      this.optionValues.districtValues = [];
+    }
+  },
   methods: {
     onOpen: function () {
       this.isOpen = !this.isOpen;

@@ -6,7 +6,7 @@
     :options="filtersOptions"
     :filtersCount="filtersCount"
   ></Dropfilters>
-  <div class="list-page">
+  <div class="list-page" :class="{ '-dark': isDarkMode }">
     <template v-for="ad of relevantAds" :key="ad._id">
       <div
         class="card"
@@ -52,10 +52,18 @@
 import Dropfilters from "@/components/Dropfilters.vue";
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
-import { computed, defineComponent, onMounted, onUnmounted } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  watchEffect,
+} from "vue";
 import { HalfCircleSpinner } from "epic-spinners";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import { initialFilters } from "@/store/modules/relevantAd/state";
+import router from "@/router";
 
 const namespace = "relevantAd";
 
@@ -66,6 +74,7 @@ export default defineComponent({
     Dropfilters,
   },
   setup() {
+    const route = useRoute();
     const store = useStore();
 
     const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
@@ -78,6 +87,10 @@ export default defineComponent({
 
     const isLoading = computed(
       () => store.getters[`${namespace}/getIsLoading`]
+    );
+
+    const isDarkMode = computed(
+      () => store.getters[`${namespace}/getIsDarkMode`]
     );
 
     const filtersCount = computed(
@@ -104,7 +117,31 @@ export default defineComponent({
       }
     };
 
+    watchEffect(
+      () => {
+        if (filtersOptions.value) {
+          const opt = filtersOptions.value;
+          delete opt.isLegal;
+          router.push({ query: opt });
+        }
+      },
+      {
+        flush: "post",
+      }
+    );
+
     onMounted(() => {
+      if (Object.keys(route.query).length > 0) {
+        store.dispatch(
+          `${namespace}/${RelevantAdActionTypes.SetDefaultFilter}`,
+          route.query
+        );
+      }
+
+      if (route.name === "Dark") {
+        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetDarkMode}`);
+      }
+
       store.dispatch(
         `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewPage}`,
         {
@@ -127,6 +164,7 @@ export default defineComponent({
       filtersCount,
       totalPages,
       filtersOptions,
+      isDarkMode,
     };
   },
   methods: {
@@ -238,6 +276,16 @@ export default defineComponent({
   display: grid;
   margin-top: 1em;
   grid-template-columns: repeat(3, 2fr);
+
+  &.-dark {
+    background-color: #050505;
+    border-radius: 5px;
+
+    .content {
+      background-color: white;
+      box-shadow: 0px 0px 20px white;
+    }
+  }
 }
 
 .dropfilters {

@@ -2,7 +2,6 @@ import { GetterTree } from "vuex";
 import { FilterState, RelevantAdState } from "./state-types";
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { RootState } from "@/store/types";
-import { initialFilters } from "./state";
 
 export const getters: GetterTree<RelevantAdState, RootState> = {
   getRelevantAds(state): RelevantAd[] {
@@ -30,12 +29,16 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     const { loading } = state;
     return loading;
   },
+  getIsDarkMode(state): boolean {
+    const isDarkMode = state.currentFilters.isLegal === false;
+    return isDarkMode;
+  },
   getTotalPages(state): number | null {
     const { totalPages } = state;
     return totalPages;
   },
   getFiltersCount(state: RelevantAdState): number | null {
-    const { currentFilters } = state;
+    const { currentFilters, initialFilters } = state;
     let cpt = 0;
     (Object.keys(currentFilters) as (keyof FilterState)[]).forEach((key) => {
       if (
