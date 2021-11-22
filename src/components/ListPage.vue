@@ -182,7 +182,10 @@ export default defineComponent({
           `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
           {
             page: 0,
-            filters: filtersOptions,
+            filters: {
+              ...filtersOptions,
+              isLegal: !this.isDarkMode,
+            },
           }
         );
       } else {

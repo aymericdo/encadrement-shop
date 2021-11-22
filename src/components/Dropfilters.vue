@@ -181,7 +181,6 @@ export default defineComponent({
       (newValue) => {
         optionValues.value = newValue;
 
-        console.log(newValue.cityValue);
         if (newValue.cityValue !== "all") {
           optionValues.value = {
             ...optionValues.value,

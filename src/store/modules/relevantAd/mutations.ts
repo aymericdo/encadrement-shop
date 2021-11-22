@@ -25,7 +25,10 @@ export const mutations: MutationTree<RelevantAdState> = {
   },
   [RelevantAdMutationType.SetFilters](state, payload) {
     state.currentPage = 0;
-    state.currentFilters = { ...payload };
+    state.currentFilters = {
+      ...payload,
+      isLegal: state.currentFilters.isLegal,
+    };
   },
   [RelevantAdMutationType.SetTotalPages](state, payload) {
     state.totalPages = payload;
