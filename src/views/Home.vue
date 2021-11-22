@@ -3,7 +3,8 @@
     <Menu></Menu>
     <div class="title">
       <h3>
-        La sélection d'annonces conformes de l'extension
+        La sélection d'annonces
+        <span v-if="isDarkMode" class="non">non </span>conformes de l'extension
         <a class="link" href="https://encadrement-loyers.fr">Encadrement</a>
       </h3>
     </div>
@@ -12,15 +13,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import Menu from "@/components/menu/Menu.vue";
 import ListPage from "@/components/ListPage.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "Home",
   components: {
     Menu,
     ListPage,
+  },
+  setup() {
+    const store = useStore();
+
+    const isDarkMode = computed(
+      () => store.getters[`relevantAd/getIsDarkMode`]
+    );
+
+    return {
+      isDarkMode,
+    };
   },
 });
 </script>
@@ -29,6 +42,10 @@ export default defineComponent({
 .title > h3 {
   margin-top: 1.5rem;
   margin-left: 3.125rem;
+
+  & > .non {
+    color: red;
+  }
 
   & > .link {
     text-decoration: none;
