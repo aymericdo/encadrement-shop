@@ -37,13 +37,12 @@
       </div>
     </template>
     <div class="center">
-      <half-circle-spinner
-        :animation-duration="1000"
-        color="#fdcd56"
-        :size="100"
-        v-if="isLoading"
+      <bounce-loader
         class="spinner"
-      />
+        :loading="isLoading"
+        color="#fdcd56"
+        :size="'100px'"
+      ></bounce-loader>
     </div>
   </div>
 </template>
@@ -59,7 +58,7 @@ import {
   onUnmounted,
   watchEffect,
 } from "vue";
-import { HalfCircleSpinner } from "epic-spinners";
+import BounceLoader from 'vue-spinner/src/BounceLoader.vue';
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { initialFilters } from "@/store/modules/relevantAd/state";
@@ -70,7 +69,7 @@ const namespace = "relevantAd";
 export default defineComponent({
   name: "ListPage",
   components: {
-    HalfCircleSpinner,
+    BounceLoader,
     Dropfilters,
   },
   setup() {
