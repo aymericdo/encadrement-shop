@@ -58,7 +58,7 @@ import {
   onUnmounted,
   watchEffect,
 } from "vue";
-import BounceLoader from 'vue-spinner/src/BounceLoader.vue';
+import BounceLoader from "vue-spinner/src/BounceLoader.vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { initialFilters } from "@/store/modules/relevantAd/state";
@@ -207,7 +207,8 @@ export default defineComponent({
       const yesterdayDateFormatted = yesterdayDate.toLocaleDateString();
       const dayBeforeYesterdayDate = new Date();
       dayBeforeYesterdayDate.setDate(yesterdayDate.getDate() - 1);
-      const dayBeforeYesterdayDateFormatted = yesterdayDate.toLocaleDateString();
+      const dayBeforeYesterdayDateFormatted =
+        yesterdayDate.toLocaleDateString();
 
       const dateFormat = d.toLocaleDateString();
       const timeFormat = d.toLocaleTimeString(navigator.language, {

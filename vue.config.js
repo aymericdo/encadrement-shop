@@ -18,7 +18,7 @@ module.exports = {
   css: {
     loaderOptions: {
       scss: {
-        additionalData: `
+        prependData: `
           @import "~@/assets/scss/variables.scss";
           @import "~@/assets/scss/garnett.scss";
         `,

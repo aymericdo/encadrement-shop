@@ -305,9 +305,10 @@ export default defineComponent({
         if (
           this.optionValues.districtValues.some((value) => value === opt.value)
         ) {
-          this.optionValues.districtValues = this.optionValues.districtValues.filter(
-            (value) => value !== opt.value
-          );
+          this.optionValues.districtValues =
+            this.optionValues.districtValues.filter(
+              (value) => value !== opt.value
+            );
         } else {
           this.optionValues.districtValues = [
             ...this.optionValues.districtValues,
@@ -322,9 +323,10 @@ export default defineComponent({
             )
           )
         ) {
-          this.optionValues.districtValues = this.optionValues.districtValues.filter(
-            (value) => !opts.map((o) => o.value).includes(value)
-          );
+          this.optionValues.districtValues =
+            this.optionValues.districtValues.filter(
+              (value) => !opts.map((o) => o.value).includes(value)
+            );
         } else {
           this.optionValues.districtValues = [
             ...this.optionValues.districtValues,
