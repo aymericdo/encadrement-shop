@@ -46,7 +46,6 @@ import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
 import { computed, defineComponent, onMounted, onUnmounted } from "vue";
 import BounceLoader from "vue-spinner/src/BounceLoader.vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
 
 const namespace = "relevantAd";
 
@@ -56,13 +55,9 @@ export default defineComponent({
     BounceLoader,
   },
   setup() {
-    const route = useRoute();
     const store = useStore();
 
     const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
-    const filtersOptions = computed(
-      () => store.getters[`${namespace}/getCurrentFilters`]
-    );
     const totalPages = computed(
       () => store.getters[`${namespace}/getTotalPages`]
     );
@@ -82,34 +77,16 @@ export default defineComponent({
     const handleScroll = () => {
       if (
         !isLoading.value &&
-        page.value < totalPages.value &&
+        page.value + 1 < totalPages.value &&
         window.innerHeight + window.scrollY >= document.body.offsetHeight
       ) {
-        store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewPage}`,
-          {
-            page: page.value,
-            filters: filtersOptions.value,
-          }
-        );
+        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetNewPage}`, {
+          page: page.value + 1,
+        });
       }
     };
 
     onMounted(() => {
-      if (Object.keys(route.query).length > 0) {
-        store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.SetDefaultFilter}`,
-          route.query
-        );
-      }
-
-      store.dispatch(
-        `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewPage}`,
-        {
-          page: page.value,
-          filters: filtersOptions.value,
-        }
-      );
       window.addEventListener("scroll", handleScroll);
     });
 

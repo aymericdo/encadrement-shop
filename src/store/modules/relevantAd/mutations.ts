@@ -40,6 +40,7 @@ export const mutations: MutationTree<RelevantAdState> = {
     state.loading = false;
   },
   [RelevantAdMutationType.SetDarkMode](state) {
+    state.currentPage = 0;
     state.initialFilters = {
       ...state.initialFilters,
       isLegal: false,
@@ -50,6 +51,7 @@ export const mutations: MutationTree<RelevantAdState> = {
     };
   },
   [RelevantAdMutationType.SetLegalMode](state) {
+    state.currentPage = 0;
     state.initialFilters = {
       ...state.initialFilters,
       isLegal: true,

@@ -86,8 +86,17 @@ export default defineComponent({
     );
 
     onMounted(() => {
+      if (Object.keys(route.query).length > 0) {
+        store.dispatch(
+          `${namespace}/${RelevantAdActionTypes.SetDefaultFilter}`,
+          route.query
+        );
+      }
+
       if (route.name === "Dark") {
         store.dispatch(`${namespace}/${RelevantAdActionTypes.SetDarkMode}`);
+      } else {
+        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetLegalMode}`);
       }
     });
 
@@ -111,24 +120,16 @@ export default defineComponent({
       } | null
     ) => {
       if (filtersOptions) {
-        store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
-          {
-            page: 0,
-            filters: {
-              ...filtersOptions,
-              isLegal: !isDarkMode.value,
-            },
-          }
-        );
+        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetNewFilters}`, {
+          filters: {
+            ...filtersOptions,
+            isLegal: !isDarkMode.value,
+          },
+        });
       } else {
-        store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
-          {
-            page: 0,
-            filters: initialFilters,
-          }
-        );
+        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetNewFilters}`, {
+          filters: initialFilters,
+        });
       }
     };
 
