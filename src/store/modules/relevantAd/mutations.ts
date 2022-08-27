@@ -49,6 +49,16 @@ export const mutations: MutationTree<RelevantAdState> = {
       isLegal: false,
     };
   },
+  [RelevantAdMutationType.SetLegalMode](state) {
+    state.initialFilters = {
+      ...state.initialFilters,
+      isLegal: true,
+    };
+    state.currentFilters = {
+      ...state.currentFilters,
+      isLegal: true,
+    };
+  },
   [RelevantAdMutationType.SetDefaultFilter](state, payload) {
     state.initialFilters = {
       ...payload,

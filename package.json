@@ -12,13 +12,14 @@
   },
   "dependencies": {
     "@vueform/slider": "^1.0.3",
+    "@vueform/toggle": "^2.1.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0",
-    "vue-spinner": "^1.0.4"
+    "vue-spinner": "^1.0.4",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.33.1",

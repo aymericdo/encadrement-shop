@@ -110,6 +110,9 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
   async [RelevantAdActionTypes.SetDarkMode]({ commit }) {
     commit(RelevantAdMutationType.SetDarkMode);
   },
+  async [RelevantAdActionTypes.SetLegalMode]({ commit }) {
+    commit(RelevantAdMutationType.SetLegalMode);
+  },
   async [RelevantAdActionTypes.SetDefaultFilter](
     { commit },
     payload: FilterState

@@ -1,11 +1,4 @@
 <template>
-  <Dropfilters
-    class="dropfilters"
-    @onSubmit="changeFilters($event)"
-    @onReset="changeFilters(null)"
-    :options="filtersOptions"
-    :filtersCount="filtersCount"
-  ></Dropfilters>
   <div class="list-page" :class="{ '-dark': isDarkMode }">
     <template v-for="ad of relevantAds" :key="ad._id">
       <div
@@ -48,21 +41,12 @@
 </template>
 
 <script lang="ts">
-import Dropfilters from "@/components/Dropfilters.vue";
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  watchEffect,
-} from "vue";
+import { computed, defineComponent, onMounted, onUnmounted } from "vue";
 import BounceLoader from "vue-spinner/src/BounceLoader.vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { initialFilters } from "@/store/modules/relevantAd/state";
-import router from "@/router";
 
 const namespace = "relevantAd";
 
@@ -70,7 +54,6 @@ export default defineComponent({
   name: "ListPage",
   components: {
     BounceLoader,
-    Dropfilters,
   },
   setup() {
     const route = useRoute();
@@ -90,10 +73,6 @@ export default defineComponent({
 
     const isDarkMode = computed(
       () => store.getters[`${namespace}/getIsDarkMode`]
-    );
-
-    const filtersCount = computed(
-      () => store.getters[`${namespace}/getFiltersCount`]
     );
 
     const relevantAds = computed(
@@ -116,29 +95,12 @@ export default defineComponent({
       }
     };
 
-    watchEffect(
-      () => {
-        if (filtersOptions.value) {
-          const opt = filtersOptions.value;
-          delete opt.isLegal;
-          router.push({ query: opt });
-        }
-      },
-      {
-        flush: "post",
-      }
-    );
-
     onMounted(() => {
       if (Object.keys(route.query).length > 0) {
         store.dispatch(
           `${namespace}/${RelevantAdActionTypes.SetDefaultFilter}`,
           route.query
         );
-      }
-
-      if (route.name === "Dark") {
-        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetDarkMode}`);
       }
 
       store.dispatch(
@@ -160,43 +122,11 @@ export default defineComponent({
       page,
       relevantAds,
       isLoading,
-      filtersCount,
       totalPages,
-      filtersOptions,
       isDarkMode,
     };
   },
   methods: {
-    changeFilters(filtersOptions?: {
-      surfaceValue: number[];
-      roomValue: number[];
-      priceValue: number[];
-      furnishedValue: string;
-      cityValue: string;
-      isHouseValue: string;
-      districtValues: never[];
-    }) {
-      if (filtersOptions) {
-        this.store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
-          {
-            page: 0,
-            filters: {
-              ...filtersOptions,
-              isLegal: !this.isDarkMode,
-            },
-          }
-        );
-      } else {
-        this.store.dispatch(
-          `${namespace}/${RelevantAdActionTypes.FetchRelevantAdsWithNewFilters}`,
-          {
-            page: 0,
-            filters: initialFilters,
-          }
-        );
-      }
-    },
     getDisplayableDate(date: string): string {
       const d = new Date(date);
 
@@ -289,11 +219,6 @@ export default defineComponent({
       box-shadow: 0px 0px 20px white;
     }
   }
-}
-
-.dropfilters {
-  margin-left: 3.125rem;
-  max-width: 150px;
 }
 
 .center {
