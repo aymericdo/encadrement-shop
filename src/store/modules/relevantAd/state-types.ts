@@ -19,4 +19,5 @@ export interface RelevantAdState {
   initialFilters: FilterState;
   currentFilters: FilterState;
   totalPages: number | null;
+  mapMode: boolean;
 }

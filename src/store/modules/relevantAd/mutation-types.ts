@@ -9,5 +9,6 @@ export enum RelevantAdMutationType {
   StopLoading = "STOP_LOADING",
   SetDarkMode = "SET_DARK_MODE",
   SetLegalMode = "SET_LEGAL_MODE",
+  SetMapMode = "SET_MAP_MODE",
   SetDefaultFilter = "SET_DEFAULT_FILTER",
 }

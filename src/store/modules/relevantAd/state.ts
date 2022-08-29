@@ -20,6 +20,7 @@ export const state: RelevantAdState = {
   relevantAdList: [],
   loading: false,
   error: false,
+  mapMode: false,
   currentPage: 0,
   initialFilters,
   currentFilters: {

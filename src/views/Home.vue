@@ -24,15 +24,22 @@
           :onLabel="'Non conforme'"
         />
       </div>
+      <div class="map-toggle">
+        <Toggle
+          @change="handleMapToggle"
+          :value="isMapMode"
+          :offLabel="'Liste'"
+          :onLabel="'Carte'"
+        />
+      </div>
     </div>
-    <ListPage />
+    <router-view />
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, watchEffect } from "vue";
 import Menu from "@/components/menu/Menu.vue";
-import ListPage from "@/components/ListPage.vue";
 import Dropfilters from "@/components/Dropfilters.vue";
 import { initialFilters } from "@/store/modules/relevantAd/state";
 import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
@@ -49,7 +56,6 @@ export default defineComponent({
   name: "Home",
   components: {
     Menu,
-    ListPage,
     Dropfilters,
     Toggle,
   },
@@ -61,6 +67,8 @@ export default defineComponent({
       () => store.getters[`relevantAd/getIsDarkMode`]
     );
 
+    const isMapMode = computed(() => store.getters[`relevantAd/getIsMapMode`]);
+
     const filtersOptions = computed(
       () => store.getters[`${namespace}/getCurrentFilters`]
     );
@@ -71,13 +79,21 @@ export default defineComponent({
 
     watchEffect(
       () => {
-        if (filtersOptions.value) {
-          const opt = { ...filtersOptions.value };
+        const opt = { ...filtersOptions.value };
 
-          const isDark = !opt.isLegal;
-          delete opt.isLegal;
+        const isDark = !opt.isLegal;
+        delete opt.isLegal;
 
-          router.push({ name: isDark ? "Dark" : "Home", query: opt });
+        if (isDark) {
+          router.push({
+            name: isMapMode.value ? "DarkMap" : "DarkList",
+            query: opt,
+          });
+        } else {
+          router.push({
+            name: isMapMode.value ? "HomeMap" : "HomeList",
+            query: opt,
+          });
         }
       },
       {
@@ -93,10 +109,17 @@ export default defineComponent({
         );
       }
 
-      if (route.name === "Dark") {
+      if (route.name?.toString().includes("Dark")) {
         store.dispatch(`${namespace}/${RelevantAdActionTypes.SetDarkMode}`);
       } else {
         store.dispatch(`${namespace}/${RelevantAdActionTypes.SetLegalMode}`);
+      }
+
+      if (route.name === "HomeMap" || route.name === "DarkMap") {
+        store.dispatch(
+          `${namespace}/${RelevantAdActionTypes.SetMapMode}`,
+          true
+        );
       }
     });
 
@@ -106,6 +129,10 @@ export default defineComponent({
       } else {
         store.dispatch(`${namespace}/${RelevantAdActionTypes.SetLegalMode}`);
       }
+    };
+
+    const handleMapToggle = (event: boolean) => {
+      store.dispatch(`${namespace}/${RelevantAdActionTypes.SetMapMode}`, event);
     };
 
     const changeFilters = (
@@ -134,17 +161,25 @@ export default defineComponent({
     };
 
     return {
+      isMapMode,
       isDarkMode,
       filtersOptions,
       filtersCount,
       changeFilters,
       handleDarkToggle,
+      handleMapToggle,
     };
   },
 });
 </script>
 
 <style scoped lang="scss">
+.home {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .title > h3 {
   margin-top: 1.5rem;
   margin-left: 3.125rem;
@@ -166,7 +201,7 @@ export default defineComponent({
 
 .menu-filters {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
 
   .dropfilters {
@@ -174,6 +209,7 @@ export default defineComponent({
     max-width: 150px;
   }
 
+  .map-toggle,
   .dark-toggle {
     padding: 1rem 0.625rem;
 
@@ -185,7 +221,6 @@ export default defineComponent({
     }
 
     ::v-deep(.toggle) {
-      padding: 0 70px 0 20px;
       font-weight: 500;
       border-color: black;
 
@@ -196,7 +231,22 @@ export default defineComponent({
           background: $yellow;
         }
       }
+    }
+  }
 
+  .map-toggle {
+    ::v-deep(.toggle) {
+      padding: 0 2rem 0 1.25rem;
+
+      &.toggle-on {
+        background: $yellow;
+      }
+    }
+  }
+
+  .dark-toggle {
+    ::v-deep(.toggle) {
+      padding: 0 5rem 0 1.25rem;
       &.toggle-on {
         background: red;
       }

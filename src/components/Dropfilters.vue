@@ -445,7 +445,7 @@ export default defineComponent({
   background-color: white;
   border-radius: 4px;
   border: 2px solid $deepblack;
-  z-index: 1;
+  z-index: 1001;
 }
 
 .option-list > .row {

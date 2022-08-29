@@ -119,4 +119,7 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
   ) {
     commit(RelevantAdMutationType.SetDefaultFilter, payload);
   },
+  async [RelevantAdActionTypes.SetMapMode]({ commit }, payload: boolean) {
+    commit(RelevantAdMutationType.SetMapMode, payload);
+  },
 };

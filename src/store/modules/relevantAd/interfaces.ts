@@ -11,4 +11,7 @@ export interface RelevantAd {
   city: string;
   url: string;
   isHouse?: boolean;
+  latitude?: string;
+  longitude?: string;
+  blurry?: boolean;
 }

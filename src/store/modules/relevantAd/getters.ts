@@ -31,6 +31,10 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     const isDarkMode = state.currentFilters.isLegal === false;
     return isDarkMode;
   },
+  getIsMapMode(state): boolean {
+    const isMapMode = state.mapMode;
+    return isMapMode;
+  },
   getTotalPages(state): number | null {
     const { totalPages } = state;
     return totalPages;
