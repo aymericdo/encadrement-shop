@@ -24,7 +24,7 @@
           :onLabel="'Non conforme'"
         />
       </div>
-      <div class="map-toggle" v-if="false">
+      <div class="map-toggle">
         <Toggle
           @change="handleMapToggle"
           :value="isMapMode"

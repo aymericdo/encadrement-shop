@@ -62,7 +62,7 @@ export default defineComponent({
   top: 0;
   left: 0;
   cursor: pointer;
-  z-index: 2;
+  z-index: 1000;
 }
 
 .sidebar-burger {
@@ -77,7 +77,7 @@ export default defineComponent({
   left: 0;
   top: 0;
   height: 100vh;
-  z-index: 999;
+  z-index: 1005;
   padding: 3rem 20px 2rem 20px;
   width: 300px;
 }
