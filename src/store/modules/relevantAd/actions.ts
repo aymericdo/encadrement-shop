@@ -1,4 +1,4 @@
-import { ActionTree, Commit } from "vuex";
+import { ActionTree, Commit, Dispatch, GetterTree } from "vuex";
 import axios from "axios";
 import { FilterState, RelevantAdState } from "./state-types";
 import { domain } from "@/helper/config";
@@ -62,9 +62,24 @@ const fetchData = (
   }
 };
 
+const fetchDataUntilTheEnd = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getters: any,
+  dispatch: Dispatch
+) => {
+  if (
+    getters.getIsMapMode &&
+    getters.getCurrentPage + 1 < getters.getTotalPages
+  ) {
+    dispatch(RelevantAdActionTypes.SetNewPage, {
+      page: getters.getCurrentPage + 1,
+    });
+  }
+};
+
 export const actions: ActionTree<RelevantAdState, RootState> = {
   async [RelevantAdActionTypes.SetNewFilters](
-    { commit },
+    { commit, getters, dispatch },
     payload: {
       filters: FilterState;
     }
@@ -76,11 +91,12 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
     commit(RelevantAdMutationType.SetFilters, options.filters);
 
     fetchData(options, commit, (payload: RelevantAd[]) => {
+      fetchDataUntilTheEnd(getters, dispatch);
       commit(RelevantAdMutationType.SetRelevantAds, payload);
     });
   },
   async [RelevantAdActionTypes.SetNewPage](
-    { commit, getters },
+    { commit, getters, dispatch },
     payload: {
       page: number;
     }
@@ -93,23 +109,26 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
     fetchData(options, commit, (payload: RelevantAd[]) => {
       commit(RelevantAdMutationType.AddRelevantAds, payload);
       commit(RelevantAdMutationType.IncrementPage);
+      fetchDataUntilTheEnd(getters, dispatch);
     });
   },
-  async [RelevantAdActionTypes.SetDarkMode]({ commit, getters }) {
+  async [RelevantAdActionTypes.SetDarkMode]({ commit, getters, dispatch }) {
     commit(RelevantAdMutationType.SetDarkMode);
     const options = {
       filters: getters.getCurrentFilters,
     };
     fetchData(options, commit, (payload: RelevantAd[]) => {
+      fetchDataUntilTheEnd(getters, dispatch);
       commit(RelevantAdMutationType.SetRelevantAds, payload);
     });
   },
-  async [RelevantAdActionTypes.SetLegalMode]({ commit, getters }) {
+  async [RelevantAdActionTypes.SetLegalMode]({ commit, getters, dispatch }) {
     commit(RelevantAdMutationType.SetLegalMode);
     const options = {
       filters: getters.getCurrentFilters,
     };
     fetchData(options, commit, (payload: RelevantAd[]) => {
+      fetchDataUntilTheEnd(getters, dispatch);
       commit(RelevantAdMutationType.SetRelevantAds, payload);
     });
   },
@@ -119,7 +138,11 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
   ) {
     commit(RelevantAdMutationType.SetDefaultFilter, payload);
   },
-  async [RelevantAdActionTypes.SetMapMode]({ commit }, payload: boolean) {
+  async [RelevantAdActionTypes.SetMapMode](
+    { commit, getters, dispatch },
+    payload: boolean
+  ) {
     commit(RelevantAdMutationType.SetMapMode, payload);
+    fetchDataUntilTheEnd(getters, dispatch);
   },
 };

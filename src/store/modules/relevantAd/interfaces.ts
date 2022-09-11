@@ -4,7 +4,7 @@ export interface RelevantAd {
   surface: number;
   roomCount: number;
   website: string;
-  createdAt: Date;
+  createdAt: string;
   hasFurniture: boolean;
   price: number;
   district: string;

@@ -18,7 +18,7 @@
           :lat-lng="getPosAd(ad)"
           :draggable="false"
         >
-          <l-popup>{{ ad.price }}€</l-popup>
+          <MapPopup :ad="ad"></MapPopup>
         </l-marker>
       </template>
     </l-map>
@@ -42,14 +42,9 @@ import {
   ref,
   watchEffect,
 } from "vue";
-import {
-  LMap,
-  LGeoJson,
-  LTileLayer,
-  LPopup,
-  LMarker,
-} from "@vue-leaflet/vue-leaflet";
+import { LMap, LGeoJson, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import BounceLoader from "vue-spinner/src/BounceLoader.vue";
+import MapPopup from "@/components/map/MapPopup.vue";
 import { useStore } from "vuex";
 import "leaflet/dist/leaflet.css";
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
@@ -79,8 +74,8 @@ export default defineComponent({
     LMap,
     LTileLayer,
     LGeoJson,
-    LPopup,
     LMarker,
+    MapPopup,
   },
   setup() {
     const store = useStore();
@@ -173,7 +168,6 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .l-map {
   height: 100%;

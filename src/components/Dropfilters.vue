@@ -310,10 +310,9 @@ export default defineComponent({
         if (
           this.optionValues.districtValues.some((value) => value === opt.value)
         ) {
-          this.optionValues.districtValues =
-            this.optionValues.districtValues.filter(
-              (value) => value !== opt.value
-            );
+          this.optionValues.districtValues = this.optionValues.districtValues.filter(
+            (value) => value !== opt.value
+          );
         } else {
           this.optionValues.districtValues = [
             ...this.optionValues.districtValues,
@@ -328,10 +327,9 @@ export default defineComponent({
             )
           )
         ) {
-          this.optionValues.districtValues =
-            this.optionValues.districtValues.filter(
-              (value) => !opts.map((o) => o.value).includes(value)
-            );
+          this.optionValues.districtValues = this.optionValues.districtValues.filter(
+            (value) => !opts.map((o) => o.value).includes(value)
+          );
         } else {
           this.optionValues.districtValues = [
             ...this.optionValues.districtValues,
@@ -558,7 +556,7 @@ export default defineComponent({
 
 @media screen and (max-width: $mobileSize) {
   .dropfilters > button.mobile-back-btn.-is-open {
-    z-index: 3;
+    z-index: 1002;
     position: fixed;
     top: 1em;
     right: 1em;
@@ -572,7 +570,6 @@ export default defineComponent({
     padding: 2rem;
     top: 0;
     left: 0;
-    z-index: 2;
     margin-top: 0;
     border: none;
     overflow-y: auto;

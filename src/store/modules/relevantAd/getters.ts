@@ -12,7 +12,9 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     const { currentPage } = state;
     return currentPage;
   },
-  getCurrentFilters(state): {
+  getCurrentFilters(
+    state
+  ): {
     surfaceValue: number[];
     roomValue: number[];
     priceValue: number[];

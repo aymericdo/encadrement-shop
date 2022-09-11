@@ -162,7 +162,7 @@ export default defineComponent({
   color: $deepblack;
   border-radius: 4px;
   border: 1px solid $deepblack;
-  z-index: 2;
+  z-index: 1001;
 }
 
 .option {

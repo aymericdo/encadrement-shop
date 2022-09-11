@@ -16,21 +16,23 @@
         :options="filtersOptions"
         :filtersCount="filtersCount"
       ></Dropfilters>
-      <div class="dark-toggle">
-        <Toggle
-          @change="handleDarkToggle"
-          :value="isDarkMode"
-          :offLabel="'Conforme'"
-          :onLabel="'Non conforme'"
-        />
-      </div>
-      <div class="map-toggle">
-        <Toggle
-          @change="handleMapToggle"
-          :value="isMapMode"
-          :offLabel="'Liste'"
-          :onLabel="'Carte'"
-        />
+      <div class="toggles">
+        <div class="dark-toggle">
+          <Toggle
+            @change="handleDarkToggle"
+            :value="isDarkMode"
+            :offLabel="'Conforme'"
+            :onLabel="'Non conforme'"
+          />
+        </div>
+        <div class="map-toggle">
+          <Toggle
+            @change="handleMapToggle"
+            :value="isMapMode"
+            :offLabel="'Liste'"
+            :onLabel="'Carte'"
+          />
+        </div>
       </div>
     </div>
     <router-view />
@@ -203,16 +205,22 @@ export default defineComponent({
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
+  padding: 0 3.125rem;
 
   .dropfilters {
-    margin-left: 3.125rem;
     max-width: 150px;
+    margin-right: 0.625rem;
+  }
+
+  .toggles {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem 0;
   }
 
   .map-toggle,
   .dark-toggle {
-    padding: 1rem 0.625rem;
-
     ::v-deep(.toggle-container) {
       &:focus {
         box-shadow: 0 0 0 var(--toggle-ring-width, 3px)
@@ -245,6 +253,8 @@ export default defineComponent({
   }
 
   .dark-toggle {
+    margin-right: 0.625rem;
+
     ::v-deep(.toggle) {
       padding: 0 5rem 0 1.25rem;
       &.toggle-on {
