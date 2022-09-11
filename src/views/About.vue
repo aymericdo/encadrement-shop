@@ -9,10 +9,6 @@
           vous (et vos yeux ébahis), une page ENTIÈRE d'annonces complètement
           vérifiées par nos soins ! :D
         </p>
-        <p>
-          Comme ça, plus besoin de tergiverser (ni de justifier), ces annonces
-          sont de fait, légales.
-        </p>
         <span class="sign">Aymeric et Thomas</span>
       </div>
     </div>
