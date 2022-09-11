@@ -6,6 +6,9 @@
   >
     <div class="content" @click="redirectTo(ad)">
       <div class="specs">
+        <div class="burry-disclaimer" v-if="ad?.blurry">
+          La localisation par coordonnées de cette annonce est imprécise.
+        </div>
         <div v-if="ad?.roomCount">
           {{ ad?.roomCount }} pièce{{ ad?.roomCount > 1 ? "s" : "" }}
         </div>
@@ -156,6 +159,10 @@ export default defineComponent({
 
   & > .space {
     flex: 1;
+  }
+
+  & > .burry-disclaimer {
+    font-style: italic;
   }
 
   & > .location > .city {
