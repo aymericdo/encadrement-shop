@@ -1,6 +1,6 @@
 <template>
   <l-popup>
-    <Card :ad="ad"></Card>
+    <Card :ad="ad" :isFromMap="true"></Card>
   </l-popup>
 </template>
 

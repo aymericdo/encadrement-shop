@@ -6,7 +6,7 @@
   >
     <div class="content" @click="redirectTo(ad)">
       <div class="specs">
-        <div class="burry-disclaimer" v-if="ad?.blurry">
+        <div class="burry-disclaimer" v-if="isFromMap && ad?.blurry">
           La localisation par coordonnées de cette annonce est imprécise.
         </div>
         <div v-if="ad?.roomCount">
@@ -38,6 +38,7 @@ export default defineComponent({
   props: {
     ad: { type: Object as () => RelevantAd },
     isLoading: { type: Boolean },
+    isFromMap: { type: Boolean, default: false },
   },
   setup() {
     const getDisplayableDate = (date?: string): string => {
@@ -51,7 +52,8 @@ export default defineComponent({
       const yesterdayDateFormatted = yesterdayDate.toLocaleDateString();
       const dayBeforeYesterdayDate = new Date();
       dayBeforeYesterdayDate.setDate(yesterdayDate.getDate() - 1);
-      const dayBeforeYesterdayDateFormatted = yesterdayDate.toLocaleDateString();
+      const dayBeforeYesterdayDateFormatted =
+        yesterdayDate.toLocaleDateString();
 
       const dateFormat = d.toLocaleDateString();
       const timeFormat = d.toLocaleTimeString(navigator.language, {
