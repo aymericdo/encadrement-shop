@@ -20,7 +20,7 @@ const fetchData = (
       surfaceValue: number[];
       roomValue: number[];
       priceValue: number[];
-      exceedingValue: number[];
+      exceedingValue?: number[];
       furnishedValue: string;
       cityValue: string;
       districtValues: string[];

@@ -16,7 +16,7 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
     surfaceValue: number[];
     roomValue: number[];
     priceValue: number[];
-    exceedingValue: number[];
+    exceedingValue?: number[];
     furnishedValue: string;
     cityValue: string;
     districtValues: never[];

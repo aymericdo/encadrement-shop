@@ -1,6 +1,7 @@
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { MutationTree } from "vuex";
 import { RelevantAdMutationType } from "./mutation-types";
+import { initialFilters } from "./state";
 import { RelevantAdState } from "./state-types";
 
 export const mutations: MutationTree<RelevantAdState> = {
@@ -45,14 +46,17 @@ export const mutations: MutationTree<RelevantAdState> = {
   [RelevantAdMutationType.SetDarkMode](state) {
     state.currentPage = 0;
     state.initialFilters = {
+      exceedingValue: initialFilters.exceedingValue,
       ...state.initialFilters,
       isLegal: false,
     };
     state.currentFilters = {
+      exceedingValue: initialFilters.exceedingValue,
       ...state.currentFilters,
       isLegal: false,
     };
   },
+
   [RelevantAdMutationType.SetLegalMode](state) {
     state.currentPage = 0;
     state.initialFilters = {
@@ -63,17 +67,25 @@ export const mutations: MutationTree<RelevantAdState> = {
       ...state.currentFilters,
       isLegal: true,
     };
+
+    delete state.initialFilters.exceedingValue;
+    delete state.currentFilters.exceedingValue;
   },
   [RelevantAdMutationType.SetDefaultFilter](state, payload) {
     state.initialFilters = {
-      exceedingValue: state.initialFilters.exceedingValue,
+      exceedingValue: initialFilters.exceedingValue,
       ...payload,
       isLegal: state.initialFilters.isLegal,
     };
     state.currentFilters = {
-      exceedingValue: state.currentFilters.exceedingValue,
+      exceedingValue: initialFilters.exceedingValue,
       ...payload,
       isLegal: state.currentFilters.isLegal,
     };
+
+    if (state.initialFilters.isLegal) {
+      delete state.initialFilters.exceedingValue;
+      delete state.currentFilters.exceedingValue;
+    }
   },
 };
