@@ -7,6 +7,7 @@ export interface RelevantAd {
   createdAt: string;
   hasFurniture: boolean;
   price: number;
+  exceeding: number;
   district: string;
   city: string;
   url: string;

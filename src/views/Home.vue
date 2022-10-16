@@ -142,6 +142,7 @@ export default defineComponent({
         surfaceValue: number[];
         roomValue: number[];
         priceValue: number[];
+        exceedingValue: number[];
         furnishedValue: string;
         cityValue: string;
         isHouseValue: string;
@@ -210,13 +211,15 @@ export default defineComponent({
 
   .dropfilters {
     max-width: 150px;
-    margin-right: 0.625rem;
+    margin-right: 1rem;
   }
 
   .toggles {
     display: flex;
     flex-wrap: wrap;
     padding: 1rem 0;
+    justify-content: space-around;
+    gap: 1rem;
   }
 
   .map-toggle,
@@ -253,8 +256,6 @@ export default defineComponent({
   }
 
   .dark-toggle {
-    margin-right: 0.625rem;
-
     ::v-deep(.toggle) {
       padding: 0 5rem 0 1.25rem;
       &.toggle-on {

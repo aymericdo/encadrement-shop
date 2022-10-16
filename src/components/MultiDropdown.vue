@@ -187,10 +187,10 @@ export default defineComponent({
   font-weight: 600;
   height: 36px;
   width: 100%;
-  border-radius: 4px;
   font-size: 20px;
   padding: 6px 12px;
-  border-color: transparent;
+  border: solid transparent 1px;
+  border-radius: 4px;
   transition: background-color ease 0.3s;
 }
 
@@ -239,7 +239,7 @@ export default defineComponent({
   background-color: white;
   color: $deepblack;
   border-radius: 4px;
-  border: 1px solid $deepblack;
+  border: solid $deepblack 1px;
   z-index: 2;
 }
 

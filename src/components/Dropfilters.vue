@@ -54,6 +54,17 @@
             />
           </span>
         </div>
+        <div v-if="isDarkMode" class="row">
+          <span class="label">Dépassement</span>
+          <span class="slider">
+            <Slider
+              v-model="optionValues.exceedingValue"
+              :min="0"
+              :max="1000"
+              :format="{ suffix: '€', decimals: 0 }"
+            />
+          </span>
+        </div>
         <div class="row">
           <span class="label">Surface</span>
           <span class="slider">
@@ -104,8 +115,8 @@
           </span>
         </div>
         <div class="row actions-btn">
-          <button class="reset-btn" @click="onReset">Reset</button>
-          <button class="submit-btn" @click="onSubmit">Go</button>
+          <button class="reset-btn" @click="onReset">Réinitialiser</button>
+          <button class="submit-btn" @click="onSubmit">Rechercher</button>
         </div>
       </div>
     </transition>
@@ -119,7 +130,8 @@ import Slider from "@vueform/slider";
 import Dropdown from "@/components/Dropdown.vue";
 import MultiDropdown from "@/components/MultiDropdown.vue";
 import { domain } from "@/helper/config";
-import { defineComponent, ref, toRefs, watch } from "vue";
+import { useStore } from "vuex";
+import { defineComponent, ref, toRefs, watch, computed } from "vue";
 
 import "@vueform/slider/themes/default.css";
 
@@ -144,11 +156,17 @@ export default defineComponent({
     Dropdown,
     MultiDropdown,
   },
-  setup(props) {
+  setup(props, { emit }) {
+    const store = useStore();
     const { options } = toRefs(props);
     const controller = new AbortController();
     const districtDropdownOptions = ref([]);
     const hasHouse = ref(false);
+    const isOpen = ref(false);
+
+    const isDarkMode = computed(
+      () => store.getters[`relevantAd/getIsDarkMode`]
+    );
 
     const optionValues = ref({ ...options.value });
 
@@ -191,10 +209,26 @@ export default defineComponent({
       }
     );
 
+    const onSubmit = () => {
+      isOpen.value = false;
+      emit("onSubmit", {
+        districtValues: optionValues.value.districtValues || null,
+        cityValue: optionValues.value.cityValue,
+        furnishedValue: optionValues.value.furnishedValue,
+        surfaceValue: optionValues.value.surfaceValue,
+        roomValue: optionValues.value.roomValue,
+        priceValue: optionValues.value.priceValue,
+        exceedingValue: optionValues.value.exceedingValue,
+        isHouseValue: optionValues.value.isHouseValue,
+      });
+    };
+
     return {
       controller,
-      isOpen: ref(false),
+      isOpen,
       optionValues,
+      onSubmit,
+      isDarkMode,
       cityDropdownOptions: [
         {
           value: "all",
@@ -285,18 +319,6 @@ export default defineComponent({
         this.optionValues.districtValues = [];
       }
     },
-    onSubmit: function () {
-      this.isOpen = false;
-      this.$emit("onSubmit", {
-        districtValues: this.optionValues.districtValues,
-        cityValue: this.optionValues.cityValue,
-        furnishedValue: this.optionValues.furnishedValue,
-        surfaceValue: this.optionValues.surfaceValue,
-        roomValue: this.optionValues.roomValue,
-        priceValue: this.optionValues.priceValue,
-        isHouseValue: this.optionValues.isHouseValue,
-      });
-    },
     onReset: function () {
       this.isOpen = false;
       this.$emit("onReset");
@@ -310,9 +332,10 @@ export default defineComponent({
         if (
           this.optionValues.districtValues.some((value) => value === opt.value)
         ) {
-          this.optionValues.districtValues = this.optionValues.districtValues.filter(
-            (value) => value !== opt.value
-          );
+          this.optionValues.districtValues =
+            this.optionValues.districtValues.filter(
+              (value) => value !== opt.value
+            );
         } else {
           this.optionValues.districtValues = [
             ...this.optionValues.districtValues,
@@ -327,9 +350,10 @@ export default defineComponent({
             )
           )
         ) {
-          this.optionValues.districtValues = this.optionValues.districtValues.filter(
-            (value) => !opts.map((o) => o.value).includes(value)
-          );
+          this.optionValues.districtValues =
+            this.optionValues.districtValues.filter(
+              (value) => !opts.map((o) => o.value).includes(value)
+            );
         } else {
           this.optionValues.districtValues = [
             ...this.optionValues.districtValues,
@@ -378,20 +402,21 @@ export default defineComponent({
 .dropfilters > button {
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  gap: 1rem;
   align-items: center;
   background-color: $yellow;
   font-weight: 600;
   height: 36px;
-  border-radius: 4px;
   font-size: 20px;
   padding: 6px 12px;
-  border-color: transparent;
   transition: background-color ease 0.3s;
+  border: solid transparent 1px;
+  border-radius: 4px;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border: solid $deepblack 2px;
+      border: solid $deepblack 1px;
     }
   }
 }
@@ -412,7 +437,7 @@ export default defineComponent({
 }
 
 .dropfilters > button.-is-open {
-  border: solid $deepblack 2px;
+  border: solid $deepblack 1px;
 }
 
 .dropfilters > button > span {
@@ -442,7 +467,7 @@ export default defineComponent({
   padding: 8px 14px;
   background-color: white;
   border-radius: 4px;
-  border: 2px solid $deepblack;
+  border: solid $deepblack 1px;
   z-index: 1001;
 }
 
@@ -505,16 +530,16 @@ export default defineComponent({
   color: $deepblack;
   cursor: pointer;
   font-weight: 600;
-  border-radius: 4px;
   font-size: 14px;
   padding: 6px 12px;
-  border-color: transparent;
+  border: solid transparent 1px;
+  border-radius: 4px;
   transition: background-color ease 0.3s;
   margin-right: 0.875rem;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border: solid $deepblack 2px;
+      border: solid $deepblack 1px;
     }
   }
 }
@@ -529,15 +554,15 @@ export default defineComponent({
   background-color: $yellow;
   cursor: pointer;
   font-weight: 600;
-  border-radius: 4px;
   font-size: 14px;
   padding: 6px 12px;
-  border-color: transparent;
+  border: solid transparent 1px;
+  border-radius: 4px;
   transition: background-color ease 0.3s;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border: solid $deepblack 2px;
+      border: solid $deepblack 1px;
     }
   }
 }

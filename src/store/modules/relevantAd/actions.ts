@@ -1,4 +1,4 @@
-import { ActionTree, Commit, Dispatch, GetterTree } from "vuex";
+import { ActionTree, Commit, Dispatch } from "vuex";
 import axios from "axios";
 import { FilterState, RelevantAdState } from "./state-types";
 import { domain } from "@/helper/config";
@@ -20,6 +20,7 @@ const fetchData = (
       surfaceValue: number[];
       roomValue: number[];
       priceValue: number[];
+      exceedingValue: number[];
       furnishedValue: string;
       cityValue: string;
       districtValues: string[];
@@ -32,10 +33,16 @@ const fetchData = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filters: any = payload.filters;
 
+  if (filters.isLegal) {
+    delete filters.exceedingValue;
+  }
+
   const strOptions: string = Object.keys(filters)
     .map((key: string) => {
+      if (!filters[key] && filters[key] !== false) return null;
       return key + "=" + filters[key];
     })
+    .filter(Boolean)
     .join("&");
 
   try {

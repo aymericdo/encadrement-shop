@@ -9,6 +9,7 @@ export const initialFilters = {
   surfaceValue: [9, 100],
   roomValue: [1, 6],
   priceValue: [200, 3000],
+  exceedingValue: [0, 1000],
   furnishedValue: "all",
   cityValue: "all",
   isHouseValue: null,

@@ -17,6 +17,7 @@
           <span class="city">{{ ad?.city }}</span> - {{ ad?.district }}
         </div>
         <div>{{ ad?.price }}€</div>
+        <div v-if="ad?.exceeding" class="exceeding">+{{ ad?.exceeding }}€</div>
         <div class="space"></div>
         <div class="date">{{ getDisplayableDate(ad?.createdAt) }}</div>
       </div>
@@ -158,6 +159,10 @@ export default defineComponent({
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+
+  & > .exceeding {
+    color: red;
+  }
 
   & > .space {
     flex: 1;

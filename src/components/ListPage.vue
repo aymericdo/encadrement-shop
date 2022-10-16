@@ -131,6 +131,7 @@ export default defineComponent({
 @media screen and (max-width: $mobileSize) {
   .list-page {
     grid-template-columns: repeat(1, 2fr);
+    padding: 0;
   }
 }
 </style>
