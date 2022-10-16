@@ -66,10 +66,12 @@ export const mutations: MutationTree<RelevantAdState> = {
   },
   [RelevantAdMutationType.SetDefaultFilter](state, payload) {
     state.initialFilters = {
+      exceedingValue: state.initialFilters.exceedingValue,
       ...payload,
       isLegal: state.initialFilters.isLegal,
     };
     state.currentFilters = {
+      exceedingValue: state.currentFilters.exceedingValue,
       ...payload,
       isLegal: state.currentFilters.isLegal,
     };
