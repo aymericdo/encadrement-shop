@@ -82,10 +82,5 @@ export const mutations: MutationTree<RelevantAdState> = {
       ...payload,
       isLegal: state.currentFilters.isLegal,
     };
-
-    if (state.initialFilters.isLegal) {
-      delete state.initialFilters.exceedingValue;
-      delete state.currentFilters.exceedingValue;
-    }
   },
 };
