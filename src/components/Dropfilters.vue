@@ -164,6 +164,45 @@ export default defineComponent({
     const hasHouse = ref(false);
     const isOpen = ref(false);
 
+    const cityDropdownOptions = ref([
+      {
+        value: "all",
+        label: "Tout",
+        hasHouse: true,
+      },
+      {
+        value: "paris",
+        label: "Paris",
+      },
+      {
+        value: "lille",
+        label: "Lille",
+      },
+      {
+        value: "plaineCommune",
+        label: "Plaine Commune",
+        hasHouse: true,
+      },
+      {
+        value: "estEnsemble",
+        label: "Est Ensemble",
+        hasHouse: true,
+      },
+      {
+        value: "lyon",
+        label: "Lyon",
+      },
+      {
+        value: "montpellier",
+        label: "Montpellier",
+      },
+      {
+        value: "bordeaux",
+        label: "Bordeaux",
+        hasHouse: true,
+      },
+    ]);
+
     const isDarkMode = computed(
       () => store.getters[`relevantAd/getIsDarkMode`]
     );
@@ -199,12 +238,8 @@ export default defineComponent({
       (newValue) => {
         optionValues.value = newValue;
 
-        if (newValue.cityValue !== "all") {
-          optionValues.value = {
-            ...optionValues.value,
-            districtValues: optionValues.value.districtValues || [],
-          };
-          fetchDistricts();
+        if (optionValues.value.cityValue !== newValue.cityValue) {
+          onCityChange({ value: newValue.cityValue });
         }
       }
     );
@@ -223,49 +258,44 @@ export default defineComponent({
       });
     };
 
+    const onCityChange = (event) => {
+      optionValues.value.cityValue = event.value;
+      hasHouse.value = !!cityDropdownOptions.value.find(
+        (c) => c.value === optionValues.value.cityValue
+      )?.hasHouse;
+
+      if (!hasHouse.value) {
+        optionValues.value.isHouseValue = null;
+      }
+
+      if (optionValues.value.cityValue) {
+        if (optionValues.value.cityValue !== "all") {
+          fetchDistricts();
+        }
+        optionValues.value.districtValues = [];
+      }
+    };
+
+    const onOpen = () => {
+      isOpen.value = !isOpen.value;
+    };
+
+    const onReset = () => {
+      isOpen.value = false;
+      emit("onReset");
+    };
+
     return {
       controller,
       isOpen,
       optionValues,
       onSubmit,
+      onCityChange,
+      onOpen,
+      fetchDistricts,
+      onReset,
       isDarkMode,
-      cityDropdownOptions: [
-        {
-          value: "all",
-          label: "Tout",
-        },
-        {
-          value: "paris",
-          label: "Paris",
-        },
-        {
-          value: "lille",
-          label: "Lille",
-        },
-        {
-          value: "plaineCommune",
-          label: "Plaine Commune",
-          hasHouse: true,
-        },
-        {
-          value: "estEnsemble",
-          label: "Est Ensemble",
-          hasHouse: true,
-        },
-        {
-          value: "lyon",
-          label: "Lyon",
-        },
-        {
-          value: "montpellier",
-          label: "Montpellier",
-        },
-        {
-          value: "bordeaux",
-          label: "Bordeaux",
-          hasHouse: true,
-        },
-      ],
+      cityDropdownOptions,
       furnishedDropdownOptions: [
         {
           value: "all",
@@ -299,30 +329,6 @@ export default defineComponent({
     };
   },
   methods: {
-    onOpen: function () {
-      this.isOpen = !this.isOpen;
-    },
-    onCityChange: function (event) {
-      this.optionValues.cityValue = event.value;
-      this.hasHouse = !!this.cityDropdownOptions.find(
-        (c) => c.value === this.optionValues.cityValue
-      )?.hasHouse;
-
-      if (!this.hasHouse) {
-        this.optionValues.isHouseValue = null;
-      }
-
-      if (this.optionValues.cityValue) {
-        if (this.optionValues.cityValue !== "all") {
-          this.fetchDistricts();
-        }
-        this.optionValues.districtValues = [];
-      }
-    },
-    onReset: function () {
-      this.isOpen = false;
-      this.$emit("onReset");
-    },
     roomValueFct: function (value) {
       return `${value} pièce${value > 1 ? "s" : ""}`;
     },
@@ -366,29 +372,6 @@ export default defineComponent({
           ];
         }
       }
-    },
-    fetchDistricts: function () {
-      fetch(`${domain}districts/list/${this.optionValues.cityValue}`, {
-        signal: this.controller.signal,
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.message === "token expired") {
-            throw res;
-          } else {
-            return res;
-          }
-        })
-        .then((res) => {
-          this.districtDropdownOptions = res.map((district) => ({
-            groupBy: district.groupBy,
-            value: district.value,
-            label: district.value,
-          }));
-        })
-        .catch((err) => {
-          console.error(err);
-        });
     },
   },
 });
