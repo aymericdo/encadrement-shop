@@ -215,13 +215,6 @@ export default defineComponent({
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.message === "token expired") {
-            throw res;
-          } else {
-            return res;
-          }
-        })
-        .then((res) => {
           districtDropdownOptions.value = res.map((district) => ({
             groupBy: district.groupBy,
             value: district.value,

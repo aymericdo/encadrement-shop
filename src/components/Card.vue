@@ -145,6 +145,7 @@ export default defineComponent({
   align-items: center;
   box-shadow: 0px 0px 20px #050505;
   border-radius: 8px;
+  background-color: white;
 }
 
 .content:hover {

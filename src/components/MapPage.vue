@@ -182,6 +182,18 @@ export default defineComponent({
   &.-dark {
     background-color: #050505;
     border-radius: 5px;
+
+    .card {
+      background-color: #050505;
+    }
+
+    .content {
+      box-shadow: 0px 0px 20px white;
+    }
+
+    .content:hover {
+      box-shadow: 0px 0px 10px white;
+    }
   }
 
   &.-loading .l-map {
