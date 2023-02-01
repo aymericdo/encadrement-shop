@@ -185,14 +185,14 @@ export default defineComponent({
 
     .card {
       background-color: #050505;
-    }
 
-    .content {
-      box-shadow: 0px 0px 20px white;
-    }
+      ::v-deep(.content) {
+        box-shadow: 0px 0px 20px white;
 
-    .content:hover {
-      box-shadow: 0px 0px 10px white;
+        &:hover {
+          box-shadow: 0px 0px 10px white;
+        }
+      }
     }
   }
 
