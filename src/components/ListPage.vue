@@ -1,5 +1,5 @@
 <template>
-  <div class="list-page" :class="{ '-dark': isDarkMode }">
+  <div ref="listPageRef" class="list-page" :class="{ '-dark': isDarkMode }">
     <template v-for="ad of relevantAds" :key="ad._id">
       <div class="card">
         <div class="sub-card">
@@ -21,7 +21,14 @@
 <script lang="ts">
 import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
 import Card from "@/components/Card.vue";
-import { computed, defineComponent, onMounted, onUnmounted } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  Ref,
+  ref,
+} from "vue";
 import BounceLoader from "vue-spinner/src/BounceLoader.vue";
 import { useStore } from "vuex";
 
@@ -35,6 +42,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const listPageRef: Ref<HTMLDivElement | null> = ref(null);
 
     const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
     const totalPages = computed(
@@ -57,7 +65,8 @@ export default defineComponent({
       if (
         !isLoading.value &&
         page.value + 1 < totalPages.value &&
-        window.innerHeight + window.scrollY >= document.body.offsetHeight
+        window.scrollY + window.outerHeight >=
+          (listPageRef.value as HTMLDivElement).clientHeight
       ) {
         store.dispatch(`${namespace}/${RelevantAdActionTypes.SetNewPage}`, {
           page: page.value + 1,
@@ -80,6 +89,7 @@ export default defineComponent({
       isLoading,
       totalPages,
       isDarkMode,
+      listPageRef,
     };
   },
 });
@@ -120,7 +130,6 @@ export default defineComponent({
 .card {
   padding-bottom: 100%;
   position: relative;
-  background-color: white;
 }
 
 .card.loading {
