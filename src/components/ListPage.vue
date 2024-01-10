@@ -7,6 +7,11 @@
         </div>
       </div>
     </template>
+
+    <div class="no-result" v-if="!relevantAds.length && !isLoading">
+      No result
+    </div>
+
     <div class="center">
       <bounce-loader
         class="spinner"
@@ -98,13 +103,24 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .list-page {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 2fr);
-  padding: 2rem;
+  padding: 5rem;
+
+  .no-result {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   &.-dark {
     background-color: #050505;
     border-radius: 5px;
+    .no-result {
+      color: white;
+    }
 
     .card {
       background-color: #050505;
