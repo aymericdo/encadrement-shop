@@ -142,7 +142,7 @@ export default defineComponent({
       ];
       fileList.forEach(async (file: string, index: number) => {
         const response = await axios({
-          url: `${domain}/${file}.geojson`,
+          url: `${domain}${file}.geojson`,
         });
         geojsons.value.push({
           id: index,
