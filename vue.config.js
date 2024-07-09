@@ -8,7 +8,6 @@ module.exports = {
     manifestOptions: {
       background_color: "#fdcd56",
     },
-
     workboxPluginMode: "GenerateSW",
     workboxOptions: {
       exclude: [/\.map$/, /_redirects/],

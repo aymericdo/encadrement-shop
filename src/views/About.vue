@@ -3,13 +3,10 @@
     <Menu></Menu>
     <div class="content">
       <div class="section">
-        <h1>À propos</h1>
         <p>
-          On s'est dit qu'on n'allait pas s'arrêter en si bon chemin, alors pour
-          vous (et vos yeux ébahis), une page ENTIÈRE d'annonces complètement
-          vérifiées par nos soins ! :D
+          Et quand le soir, dans vos belles maisons, vous allez embrasser vos petits enfants avec votre bonne conscience, au regard de Dieu vous avez probablement plus de sang sur vos mains d’inconscients que n’en aura jamais le désespéré qui a pris les armes pour essayer de sortir de son désespoir.
         </p>
-        <span class="sign">Aymeric et Thomas</span>
+        <span class="sign">Abbé Pierre, discours, 1984</span>
       </div>
     </div>
   </div>
@@ -34,16 +31,19 @@ export default defineComponent({
   align-items: center;
   flex-direction: column;
   width: 100%;
-  margin-top: 5em;
+  height: 90vh;
 
   .section {
+    display: flex;
+    flex-direction: column;
     width: 60%;
   }
 
-  & > p {
+  p {
     display: flex;
     align-self: start;
     text-align: justify;
+    font-style: italic;
   }
 }
 

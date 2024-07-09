@@ -71,6 +71,7 @@ export default defineComponent({
 }
 
 ul.sidebar-panel-nav {
+  padding-left: 0;
   list-style-type: none;
 }
 
@@ -106,7 +107,8 @@ ul.sidebar-panel-nav > li a:not(.router-link-exact-active)::after {
   bottom: -2px;
   content: "";
   width: 100%;
-  height: 3px;
+  height: 2px;
+  border-radius: 10px;
   background: $deepblack;
   transition: all 200ms ease;
   transition-property: opacity, transform;
