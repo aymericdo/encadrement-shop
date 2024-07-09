@@ -171,6 +171,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .l-map {
   height: 100%;
+  border-radius: 8px;
 }
 
 .map-page {

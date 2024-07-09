@@ -406,10 +406,14 @@ export default defineComponent({
   top: -14px;
   left: -14px;
   border-radius: 50%;
+  font-size: 1rem;
   background-color: $deepblack;
   color: white;
   width: 24px;
   height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .dropfilters > button.-is-open {
