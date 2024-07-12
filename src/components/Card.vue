@@ -2,7 +2,7 @@
   <div
     class="content-card"
     :class="{ loading: isLoading }"
-    v-if="getUrl(ad?.website, ad?.id, ad?.url)"
+    v-if="getUrl(ad?.url)"
   >
     <div class="content" @click="redirectTo(ad)">
       <div class="specs">
@@ -73,50 +73,14 @@ export default defineComponent({
       } à ${timeFormat}`;
     };
 
-    const getUrl = (website?: string, id?: string, url?: string): string => {
-      if (!id || !website) return "";
-
-      if (url) {
-        return url;
-      }
-
-      switch (website) {
-        case "pap": {
-          return `https://www.pap.fr/annonces/${id}`;
-        }
-        case "leboncoin": {
-          const regex = id.match(/\d+/g);
-          const realId = regex && regex[0];
-          return `https://www.leboncoin.fr/locations/${realId}.htm`;
-        }
-        case "seloger": {
-          return `https://www.seloger.com/annonces/locations/appartement/ville/quartier/${id}.htm`;
-        }
-        case "lefigaro": {
-          return `https://immobilier.lefigaro.fr/annonces/annonce-${id}.html`;
-        }
-        case "bienici": {
-          return `https://www.bienici.com/annonce/location/paris-18e/appartement/1piece/${id}`;
-        }
-        case "bellesdemeures": {
-          return `https://www.bellesdemeures.com/en/listings/rental/tt-1-tb-1-pl-48256/${id}`;
-        }
-        case "facebook": {
-          return `https://www.facebook.com/marketplace/item/${id}`;
-        }
-        case "logicimmo": {
-          return `https://www.logic-immo.com/detail-location-${id}.htm`;
-        }
-
-        default: {
-          return "";
-        }
-      }
+    const getUrl = (url?: string): string => {
+      if (!url) return "";
+      return url;
     };
 
     const redirectTo = (ad?: RelevantAd): void => {
       if (!ad) return;
-      window.open(getUrl(ad.website, ad.id, ad.url), "_blank");
+      window.open(getUrl(ad.url), "_blank");
     };
 
     return {

@@ -1,5 +1,5 @@
 import { GetterTree } from "vuex";
-import { FilterState, RelevantAdState } from "./state-types";
+import { CityElement, FilterState, RelevantAdState } from "./state-types";
 import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { RootState } from "@/store/types";
 
@@ -39,6 +39,30 @@ export const getters: GetterTree<RelevantAdState, RootState> = {
   getTotalPages(state): number | null {
     const { totalPages } = state;
     return totalPages;
+  },
+  getCities(state): { [city: string]: CityElement } | null {
+    const { cities } = state;
+    return cities;
+  },
+  getCoordinatesByMainCity(state): { [city: string]: [number, number] } {
+    if (!state.cities) return {};
+    return Object.values(state.cities).reduce((prev, city: CityElement) => {
+      if (Object.hasOwn(prev, city.mainCity)) return prev;
+
+      prev[city.mainCity] = city.coordinates;
+
+      return prev;
+    }, {} as { [city: string]: [number, number] });
+  },
+  getMainCities(state): string[] {
+    if (!state.cities) return [];
+    return Object.values(state.cities).reduce((prev, city: CityElement) => {
+      if (prev.includes(city.mainCity)) return prev;
+
+      prev.push(city.mainCity);
+
+      return prev;
+    }, [] as string[]);
   },
   getFiltersCount(state: RelevantAdState): number | null {
     const { currentFilters, initialFilters } = state;

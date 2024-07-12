@@ -84,6 +84,19 @@ const fetchDataUntilTheEnd = (
   }
 };
 
+const fetchCities = async (commit: Commit) => {
+  try {
+    const response = await axios({
+      url: `${domain}cities/list`,
+    });
+
+    const payload: RelevantAd[] = response && response.data;
+    commit(RelevantAdMutationType.SetCities, payload);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const actions: ActionTree<RelevantAdState, RootState> = {
   async [RelevantAdActionTypes.SetNewFilters](
     { commit, getters, dispatch },
@@ -151,5 +164,8 @@ export const actions: ActionTree<RelevantAdState, RootState> = {
   ) {
     commit(RelevantAdMutationType.SetMapMode, payload);
     fetchDataUntilTheEnd(getters, dispatch);
+  },
+  async [RelevantAdActionTypes.FetchingCities]({ commit }) {
+    fetchCities(commit);
   },
 };

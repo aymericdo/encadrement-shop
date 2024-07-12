@@ -43,6 +43,9 @@ export const mutations: MutationTree<RelevantAdState> = {
   [RelevantAdMutationType.SetMapMode](state, payload) {
     state.mapMode = payload;
   },
+  [RelevantAdMutationType.SetCities](state, payload) {
+    state.cities = payload;
+  },
   [RelevantAdMutationType.SetDarkMode](state) {
     state.currentPage = 0;
     state.initialFilters = {

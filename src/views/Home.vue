@@ -104,6 +104,8 @@ export default defineComponent({
     );
 
     onMounted(() => {
+      store.dispatch(`${namespace}/${RelevantAdActionTypes.FetchingCities}`);
+
       if (Object.keys(route.query).length > 0) {
         store.dispatch(
           `${namespace}/${RelevantAdActionTypes.SetDefaultFilter}`,

@@ -131,7 +131,14 @@ import Dropdown from "@/components/Dropdown.vue";
 import MultiDropdown from "@/components/MultiDropdown.vue";
 import { domain } from "@/helper/config";
 import { useStore } from "vuex";
-import { defineComponent, ref, toRefs, watch, computed } from "vue";
+import {
+  defineComponent,
+  ref,
+  toRefs,
+  watch,
+  computed,
+  watchEffect,
+} from "vue";
 
 import "@vueform/slider/themes/default.css";
 
@@ -164,44 +171,9 @@ export default defineComponent({
     const hasHouse = ref(false);
     const isOpen = ref(false);
 
-    const cityDropdownOptions = ref([
-      {
-        value: "all",
-        label: "Tout",
-        hasHouse: true,
-      },
-      {
-        value: "paris",
-        label: "Paris",
-      },
-      {
-        value: "lille",
-        label: "Lille",
-      },
-      {
-        value: "plaineCommune",
-        label: "Plaine Commune",
-        hasHouse: true,
-      },
-      {
-        value: "estEnsemble",
-        label: "Est Ensemble",
-        hasHouse: true,
-      },
-      {
-        value: "lyon",
-        label: "Lyon",
-      },
-      {
-        value: "montpellier",
-        label: "Montpellier",
-      },
-      {
-        value: "bordeaux",
-        label: "Bordeaux",
-        hasHouse: true,
-      },
-    ]);
+    const cityDropdownOptions = ref([]);
+
+    const cityList = computed(() => store.getters[`relevantAd/getCities`]);
 
     const isDarkMode = computed(
       () => store.getters[`relevantAd/getIsDarkMode`]
@@ -277,6 +249,44 @@ export default defineComponent({
       isOpen.value = false;
       emit("onReset");
     };
+
+    watchEffect(
+      () => {
+        if (cityList.value) {
+          const currentCityList = { ...cityList.value };
+
+          cityDropdownOptions.value = Object.keys(currentCityList).reduce(
+            (prev, city, index) => {
+              if (index === 0) {
+                prev.push({
+                  value: "all",
+                  label: "Tout",
+                  hasHouse: true,
+                });
+              }
+
+              if (
+                prev.some(
+                  (value) => value.value === currentCityList[city].mainCity
+                )
+              )
+                return prev;
+
+              prev.push({
+                value: currentCityList[city].mainCity,
+                label: currentCityList[city].displayName.mainCity,
+                hasHouse: currentCityList[city].hasHouse,
+              });
+              return prev;
+            },
+            []
+          );
+        }
+      },
+      {
+        flush: "post",
+      }
+    );
 
     return {
       controller,

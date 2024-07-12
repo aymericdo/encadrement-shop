@@ -3,6 +3,7 @@ export enum RelevantAdMutationType {
   SetRelevantAds = "SET_RELEVANT_ADS",
   AddError = "ADD_ERROR",
   IncrementPage = "INCREMENT_PAGE",
+  SetCities = "SET_CITIES",
   SetFilters = "SET_FILTERS",
   SetTotalPages = "SET_TOTAL_PAGES",
   StartLoading = "START_LOADING",

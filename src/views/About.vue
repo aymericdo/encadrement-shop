@@ -4,7 +4,11 @@
     <div class="content">
       <div class="section">
         <p>
-          Et quand le soir, dans vos belles maisons, vous allez embrasser vos petits enfants avec votre bonne conscience, au regard de Dieu vous avez probablement plus de sang sur vos mains d’inconscients que n’en aura jamais le désespéré qui a pris les armes pour essayer de sortir de son désespoir.
+          Et quand le soir, dans vos belles maisons, vous allez embrasser vos
+          petits enfants avec votre bonne conscience, au regard de Dieu vous
+          avez probablement plus de sang sur vos mains d’inconscients que n’en
+          aura jamais le désespéré qui a pris les armes pour essayer de sortir
+          de son désespoir.
         </p>
         <span class="sign">Abbé Pierre, discours, 1984</span>
       </div>

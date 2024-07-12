@@ -5,4 +5,5 @@ export enum RelevantAdActionTypes {
   SetMapMode = "SET_MAP_MODE",
   SetLegalMode = "SET_LEGAL_MODE",
   SetDefaultFilter = "SET_DEFAULT_FILTER",
+  FetchingCities = "FETCHING_CITIES",
 }

@@ -34,14 +34,7 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  Ref,
-  ref,
-  watchEffect,
-} from "vue";
+import { computed, defineComponent, Ref, ref, watchEffect } from "vue";
 import { LMap, LGeoJson, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import BounceLoader from "vue-spinner/src/BounceLoader.vue";
 import MapPopup from "@/components/map/MapPopup.vue";
@@ -53,18 +46,8 @@ import axios from "axios";
 
 const namespace = "relevantAd";
 
-const CENTERS: { [city: string]: number[] } = {
-  all: [46.2513662, 4.755835],
-  paris: [48.866667, 2.333333],
-  lille: [50.62925, 3.057256],
-  plaineCommune: [48.9246404, 2.3625964],
-  estEnsemble: [48.86415, 2.44322],
-  lyon: [45.7578137, 4.8320114],
-  montpellier: [43.6112422, 3.8767337],
-  bordeaux: [44.841225, -0.5800364],
-};
-
 const FRANCE_ZOOM = 6;
+const FRANCE_POSITION = [46.2513662, 4.755835];
 const CITY_ZOOM = 12;
 
 export default defineComponent({
@@ -85,13 +68,21 @@ export default defineComponent({
 
     const mapRef = ref(null);
 
-    const center: Ref<number[]> = ref(CENTERS["all"]);
+    const center: Ref<number[]> = ref(FRANCE_POSITION);
     const zoom: Ref<number> = ref(FRANCE_ZOOM);
 
     const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
 
     const isLoading = computed(
       () => store.getters[`${namespace}/getIsLoading`]
+    );
+
+    const mainCityList = computed(
+      () => store.getters[`relevantAd/getMainCities`]
+    );
+
+    const coordinatesByMainCity = computed(
+      () => store.getters[`relevantAd/getCoordinatesByMainCity`]
     );
 
     const isDarkMode = computed(
@@ -115,13 +106,15 @@ export default defineComponent({
         if (
           filtersOptions.value &&
           mapRef.value &&
-          (mapRef.value as any).ready
+          (mapRef.value as typeof LMap).ready
         ) {
           const opt = { ...filtersOptions.value };
-          center.value = CENTERS[opt.cityValue as string];
+          const globalView = (opt.cityValue as string) === "all";
+          center.value = globalView
+            ? FRANCE_POSITION
+            : coordinatesByMainCity.value[opt.cityValue as string];
           setTimeout(() => {
-            zoom.value =
-              (opt.cityValue as string) === "all" ? FRANCE_ZOOM : CITY_ZOOM;
+            zoom.value = globalView ? FRANCE_ZOOM : CITY_ZOOM;
           }, 250);
         }
       },
@@ -130,27 +123,29 @@ export default defineComponent({
       }
     );
 
-    onMounted(() => {
-      const fileList = [
-        "quartier_paris",
-        "quartier_lille",
-        "quartier_plaine-commune",
-        "quartier_est-ensemble",
-        "quartier_lyon",
-        "quartier_montpellier",
-        "quartier_bordeaux",
-      ];
-      fileList.forEach(async (file: string, index: number) => {
-        const response = await axios({
-          url: `${domain}${file}.geojson`,
-        });
-        geojsons.value.push({
-          id: index,
-          data: response.data,
-          city: file.split("_")[1],
-        });
-      });
-    });
+    watchEffect(
+      () => {
+        if (mainCityList.value) {
+          const currentMainCityList = [...mainCityList.value];
+
+          currentMainCityList.forEach(
+            async (mainCity: string, index: number) => {
+              const response = await axios({
+                url: `${domain}districts/geojson/${mainCity}`,
+              });
+              geojsons.value.push({
+                id: index,
+                data: response.data,
+                city: mainCity,
+              });
+            }
+          );
+        }
+      },
+      {
+        flush: "post",
+      }
+    );
 
     return {
       store,

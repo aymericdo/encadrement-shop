@@ -12,6 +12,18 @@ export interface FilterState {
   isLegal: boolean;
 }
 
+export interface CityElement {
+  mainCity: string;
+  zones: string[] | { [key: string]: string[] };
+  dateBuiltRange: [number, number][];
+  hasHouse: true;
+  coordinates: [number, number];
+  displayName: {
+    city: string;
+    mainCity: string;
+  };
+}
+
 export interface RelevantAdState {
   relevantAdList: RelevantAd[];
   loading: boolean;
@@ -21,4 +33,5 @@ export interface RelevantAdState {
   currentFilters: FilterState;
   totalPages: number | null;
   mapMode: boolean;
+  cities: { [city: string]: CityElement } | null;
 }

@@ -28,6 +28,7 @@ export const state: RelevantAdState = {
     ...initialFilters,
   },
   totalPages: null,
+  cities: null,
 };
 
 const namespaced = true;
