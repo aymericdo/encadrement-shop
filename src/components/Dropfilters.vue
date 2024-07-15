@@ -190,7 +190,7 @@ export default defineComponent({
           districtDropdownOptions.value = res.map((district) => ({
             groupBy: district.groupBy,
             value: district.value,
-            label: district.value,
+            label: district.label,
           }));
         })
         .catch((err) => {
