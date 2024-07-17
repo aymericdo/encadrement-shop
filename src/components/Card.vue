@@ -21,11 +21,7 @@
         <div class="space"></div>
         <div class="date">{{ getDisplayableDate(ad?.createdAt) }}</div>
       </div>
-      <img
-        class="image"
-        :src="require(`@/assets/images/${ad?.website}-img.png`)"
-        :alt="ad?.website"
-      />
+      <img class="image" :src="getImgUrl(ad?.website)" :alt="ad?.website" />
     </div>
   </div>
 </template>
@@ -78,12 +74,22 @@ export default defineComponent({
       return url;
     };
 
+    const getImgUrl = (website?: string) => {
+      const images = require.context("@/assets/images", false, /\.png$/);
+      try {
+        return images("./" + website + "-img.png");
+      } catch (error) {
+        return images("./default-img.png");
+      }
+    };
+
     const redirectTo = (ad?: RelevantAd): void => {
       if (!ad) return;
       window.open(getUrl(ad.url), "_blank");
     };
 
     return {
+      getImgUrl,
       getUrl,
       redirectTo,
       getDisplayableDate,
