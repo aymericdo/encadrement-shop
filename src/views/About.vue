@@ -10,7 +10,7 @@
           aura jamais le désespéré qui a pris les armes pour essayer de sortir
           de son désespoir.
         </p>
-        <span class="sign">Abbé Pierre, discours, 1984</span>
+        <span class="sign">A-P, discours, 1984</span>
       </div>
     </div>
   </div>
