@@ -571,11 +571,11 @@ export default defineComponent({
 
 @media screen and (max-width: $mobileSize) {
   .dropfilters > button.mobile-back-btn.-is-open {
+    display: flex;
     z-index: 1002;
     position: fixed;
     top: 1em;
     right: 1em;
-    display: block;
   }
 
   .option-list {

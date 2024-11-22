@@ -220,7 +220,7 @@ export default defineComponent({
     display: flex;
     flex-wrap: wrap;
     padding: 1rem 0;
-    justify-content: space-around;
+    justify-content: left;
     gap: 1rem;
   }
 
