@@ -15,7 +15,7 @@
         @on-submit="changeFilters($event)"
         @on-reset="changeFilters(null)"
       />
-      <div class="toggles p-4 flex space-x-4 flex-wrap justify-left">
+      <div class="toggles py-4 flex space-x-4 flex-wrap justify-left">
         <div class="dark-toggle">
           <Toggle
             @change="handleDarkToggle"
