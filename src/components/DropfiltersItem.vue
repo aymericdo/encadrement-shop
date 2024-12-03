@@ -97,10 +97,10 @@
                 v-bind="componentField"
                 :label="(value: string) => value"
                 label-position="bottom"
-                :min="0"
-                :max="10000"
+                :min="200"
+                :max="3500"
                 :step="1"
-                :default-value="[0, 10000]"
+                :default-value="[200, 3500]"
               />
             </FormControl>
           </FormItem>
@@ -116,9 +116,9 @@
                   :label="(value: string) => value"
                   label-position="bottom"
                   :min="0"
-                  :max="10000"
+                  :max="500"
                   :step="1"
-                  :default-value="[0, 10000]"
+                  :default-value="[0, 500]"
                 />
               </FormControl>
             </FormItem>
