@@ -8,14 +8,14 @@
         <a class="link" href="https://encadrement-loyers.fr">Encadrement</a>
       </h3>
     </div>
-    <div v-if="isMounted" class="menu-filters flex space-x-4 flex-wrap items-center mt-2 ml-12">
+    <div v-if="isMounted" class="menu-filters flex space-x-4 flex-wrap items-center mt-2 ml-12 justify-evenly md:justify-start">
       <Dropfilters
         :options="filtersOptions"
         :filtersCount="filtersCount"
         @on-submit="changeFilters($event)"
         @on-reset="changeFilters(null)"
       />
-      <div class="toggles py-4 flex space-x-4 flex-wrap justify-left">
+      <div class="py-4 flex flex-col space-y-2 flex-wrap items-center md:flex-row md:space-y-0 md:space-x-2 md:justify-start">
         <div class="dark-toggle">
           <Toggle
             @change="handleDarkToggle"
