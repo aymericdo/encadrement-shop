@@ -20,29 +20,31 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import Burger from "@/components/menu/Burger.vue";
+<script lang="ts" setup>
+  import Burger from "@/components/menu/Burger.vue";
+  import { toRefs } from "vue";
 
-export default defineComponent({
-  name: "Sidebar",
-  props: {
+  const props = defineProps({
     isPanelOpen: {
       type: Boolean,
+      default: false,
     },
-  },
-  components: {
-    Burger,
-  },
-  methods: {
-    closeSidebarPanel() {
-      this.$emit("toggleClosing", false);
-    },
-  },
-});
+  });
+
+  const {
+    isPanelOpen,
+  } = toRefs(props);
+
+  const emits = defineEmits([
+    'toggleClosing',
+  ]);
+
+  const closeSidebarPanel = () => {
+    emits("toggleClosing", false);
+  }
 </script>
 
-<style>
+<style scoped>
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 200ms ease;

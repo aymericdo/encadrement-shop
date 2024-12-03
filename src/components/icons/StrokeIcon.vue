@@ -13,11 +13,12 @@
   </svg>
 </template>
 
-<script>
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "StrokeIcon",
-  props: {
+<script setup>
+  import {
+    toRefs,
+  } from "vue";
+
+  const props = defineProps({
     width: {
       type: [Number, String],
       default: 18,
@@ -30,6 +31,11 @@ export default defineComponent({
       type: String,
       default: "#050505",
     },
-  },
-});
+  });
+
+  const {
+    width,
+    height,
+    iconColor,
+  } = toRefs(props);
 </script>

@@ -15,29 +15,30 @@
 		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z"
       />
     </g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
-    <g></g>
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
+    <g />
   </svg>
 </template>
 
-<script>
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "ArrowIcon",
-  props: {
+<script setup>
+  import {
+    toRefs,
+  } from "vue";
+
+  const props = defineProps({
     width: {
       type: [Number, String],
       default: 18,
@@ -50,6 +51,11 @@ export default defineComponent({
       type: String,
       default: "#050505",
     },
-  },
-});
+  });
+
+  const {
+    width,
+    height,
+    iconColor,
+  } = toRefs(props);
 </script>

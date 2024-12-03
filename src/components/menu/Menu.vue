@@ -24,36 +24,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import Burger from "@/components/menu/Burger.vue";
-import Sidebar from "@/components/menu/Sidebar.vue";
-import { defineComponent, ref } from "vue";
+<script lang="ts" setup>
+  import Burger from "@/components/menu/Burger.vue";
+  import Sidebar from "@/components/menu/Sidebar.vue";
+  import { ref } from "vue";
 
-export default defineComponent({
-  name: "Menu",
-  components: {
-    Burger,
-    Sidebar,
-  },
-  setup() {
-    return {
-      isPanelOpen: ref(false),
-    };
-  },
-  methods: {
-    togglingSidebar(isOpen: boolean) {
-      this.isPanelOpen = isOpen;
-    },
-  },
-  watch: {
-    $route() {
-      this.isPanelOpen = false;
-    },
-  },
-});
+  const isPanelOpen = ref(false);
+
+  const togglingSidebar = (isOpen: boolean) => {
+    isPanelOpen.value = isOpen;
+  }
 </script>
 
 <style scoped lang="scss">
+@use "@/assets/scss/variables.scss" as *;
+
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 200ms ease;

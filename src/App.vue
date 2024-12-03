@@ -2,7 +2,11 @@
   <router-view />
 </template>
 
-<style lang="scss">
+<script lang="ts" setup></script>
+
+<style scoped lang="scss">
+@use "@/assets/scss/garnett.scss" as *;
+
 #app {
   font-family: "Garnett", "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

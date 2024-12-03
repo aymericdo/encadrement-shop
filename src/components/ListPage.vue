@@ -1,107 +1,90 @@
 <template>
-  <div ref="listPageRef" class="list-page" :class="{ '-dark': isDarkMode }">
-    <template v-for="ad of relevantAds" :key="ad._id">
-      <div class="card">
-        <div class="sub-card">
-          <Card :ad="ad" :isLoading="isLoading"></Card>
+  <div class="p-4">
+    <div ref="listPageRef" class="list-page" :class="{ '-dark': isDarkMode }">
+      <template v-for="ad of relevantAds" :key="ad._id">
+        <div class="card">
+          <div class="sub-card">
+            <Card :ad="ad" :isLoading="isLoading"></Card>
+          </div>
         </div>
+      </template>
+
+      <div class="no-result" v-if="!relevantAds.length && !isLoading">
+        No result
       </div>
-    </template>
 
-    <div class="no-result" v-if="!relevantAds.length && !isLoading">
-      No result
-    </div>
-
-    <div class="center">
-      <bounce-loader
-        class="spinner"
-        :loading="isLoading"
-        color="#fdcd56"
-        :size="'100px'"
-      ></bounce-loader>
+      <div class="center">
+        <bounce-loader
+          class="spinner"
+          :loading="isLoading"
+          color="#fdcd56"
+          :size="'100px'"
+        ></bounce-loader>
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
-import Card from "@/components/Card.vue";
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  Ref,
-  ref,
-} from "vue";
-import BounceLoader from "vue-spinner/src/BounceLoader.vue";
-import { useStore } from "vuex";
+<script lang="ts" setup>
+  import { RelevantAdActionTypes } from "@/store/modules/relevantAd/action-types";
+  import Card from "@/components/CardItem.vue";
+  import {
+    computed,
+    onMounted,
+    onUnmounted,
+    Ref,
+    ref,
+  } from "vue";
+  import BounceLoader from "vue-spinner/src/BounceLoader.vue";
+  import { useStore } from "vuex";
 
-const namespace = "relevantAd";
+  const namespace = "relevantAd";
 
-export default defineComponent({
-  name: "ListPage",
-  components: {
-    BounceLoader,
-    Card,
-  },
-  setup() {
-    const store = useStore();
-    const listPageRef: Ref<HTMLDivElement | null> = ref(null);
+  const store = useStore();
+  const listPageRef: Ref<HTMLDivElement | null> = ref(null);
 
-    const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
-    const totalPages = computed(
-      () => store.getters[`${namespace}/getTotalPages`]
-    );
+  const page = computed(() => store.getters[`${namespace}/getCurrentPage`]);
+  const totalPages = computed(
+    () => store.getters[`${namespace}/getTotalPages`]
+  );
 
-    const isLoading = computed(
-      () => store.getters[`${namespace}/getIsLoading`]
-    );
+  const isLoading = computed(
+    () => store.getters[`${namespace}/getIsLoading`]
+  );
 
-    const isDarkMode = computed(
-      () => store.getters[`${namespace}/getIsDarkMode`]
-    );
+  const isDarkMode = computed(
+    () => store.getters[`${namespace}/getIsDarkMode`]
+  );
 
-    const relevantAds = computed(
-      () => store.getters[`${namespace}/getRelevantAds`]
-    );
+  const relevantAds = computed(
+    () => store.getters[`${namespace}/getRelevantAds`]
+  );
 
-    const handleScroll = () => {
-      if (
-        !isLoading.value &&
-        page.value + 1 < totalPages.value &&
-        window.scrollY + window.outerHeight >=
-          (listPageRef.value as HTMLDivElement).clientHeight
-      ) {
-        store.dispatch(`${namespace}/${RelevantAdActionTypes.SetNewPage}`, {
-          page: page.value + 1,
-        });
-      }
-    };
+  const handleScroll = () => {
+    if (
+      !isLoading.value &&
+      page.value + 1 < totalPages.value &&
+      window.scrollY + window.outerHeight >=
+        (listPageRef.value as HTMLDivElement).clientHeight
+    ) {
+      store.dispatch(`${namespace}/${RelevantAdActionTypes.SetNewPage}`, {
+        page: page.value + 1,
+      });
+    }
+  };
 
-    onMounted(() => {
-      window.addEventListener("scroll", handleScroll);
-    });
+  onMounted(() => {
+    window.addEventListener("scroll", handleScroll);
+  });
 
-    onUnmounted(() => {
-      window.removeEventListener("scroll", handleScroll);
-    });
-
-    return {
-      store,
-      page,
-      relevantAds,
-      isLoading,
-      totalPages,
-      isDarkMode,
-      listPageRef,
-    };
-  },
-});
+  onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll);
+  });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@use "@/assets/scss/variables.scss" as *;
+
 .list-page {
   position: relative;
   display: grid;

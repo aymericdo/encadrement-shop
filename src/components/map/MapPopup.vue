@@ -4,25 +4,26 @@
   </l-popup>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { LPopup } from "@vue-leaflet/vue-leaflet";
-import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
-import Card from "@/components/Card.vue";
+<script lang="ts" setup>
+  import { toRefs } from "vue";
+  import { LPopup } from "@vue-leaflet/vue-leaflet";
+  import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
+  import Card from "@/components/CardItem.vue";
 
-export default defineComponent({
-  name: "MapPopup",
-  components: {
-    LPopup,
-    Card,
-  },
-  props: {
-    ad: { type: Object as () => RelevantAd },
-  },
-});
+  const props = defineProps({
+    ad: {
+      type: Object as () => RelevantAd,
+      required: true,
+      default: null,
+    },
+  });
+
+  const {
+    ad,
+  } = toRefs(props);
 </script>
 
-<style lang="scss">
+<style lang="scss" setup>
 .leaflet-popup-content {
   margin: 0 !important;
 }

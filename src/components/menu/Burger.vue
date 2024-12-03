@@ -15,28 +15,34 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+  import { toRefs } from 'vue';
 
-export default defineComponent({
-  name: "Burger",
-  props: {
+  const props = defineProps({
     isBurgerActive: {
       type: Boolean,
+      default: false,
     },
     isFixed: {
       type: Boolean,
       default: true,
     },
-  },
-  methods: {
-    toggle() {
-      this.$emit("togglingSidebar", !this.isBurgerActive);
-    },
-  },
-});
+  });
+
+  const {
+    isBurgerActive,
+    isFixed,
+  } = toRefs(props);
+
+  const emits = defineEmits([
+    'togglingSidebar',
+  ]);
+
+  const toggle = () => {
+    emits("togglingSidebar", !isBurgerActive.value);
+  }
 </script>
-<style>
+<style scoped>
 button {
   cursor: pointer;
 }

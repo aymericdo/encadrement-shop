@@ -8,7 +8,6 @@ export interface FilterState {
   furnishedValue: string;
   cityValue: string;
   isHouseValue: number | null;
-  districtValues: never[];
   isLegal: boolean;
 }
 

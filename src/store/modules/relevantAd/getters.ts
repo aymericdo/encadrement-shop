@@ -4,57 +4,54 @@ import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 import { RootState } from "@/store/types";
 
 export const getters: GetterTree<RelevantAdState, RootState> = {
-  getRelevantAds(state): RelevantAd[] {
+  getRelevantAds(state: RelevantAdState): RelevantAd[] {
     const { relevantAdList } = state;
     return relevantAdList;
   },
-  getCurrentPage(state): number {
+  getCurrentPage(state: RelevantAdState): number {
     const { currentPage } = state;
     return currentPage;
   },
-  getCurrentFilters(state): {
+  getCurrentFilters(state: RelevantAdState): {
     surfaceValue: number[];
     roomValue: number[];
     priceValue: number[];
     exceedingValue?: number[];
     furnishedValue: string;
     cityValue: string;
-    districtValues: never[];
   } {
     const { currentFilters } = state;
     return { ...currentFilters };
   },
-  getIsLoading(state): boolean {
+  getIsLoading(state: RelevantAdState): boolean {
     const { loading } = state;
     return loading;
   },
-  getIsDarkMode(state): boolean {
+  getIsDarkMode(state: RelevantAdState): boolean {
     const isDarkMode = state.currentFilters.isLegal === false;
     return isDarkMode;
   },
-  getIsMapMode(state): boolean {
+  getIsMapMode(state: RelevantAdState): boolean {
     const isMapMode = state.mapMode;
     return isMapMode;
   },
-  getTotalPages(state): number | null {
+  getTotalPages(state: RelevantAdState): number | null {
     const { totalPages } = state;
     return totalPages;
   },
-  getCities(state): { [city: string]: CityElement } | null {
+  getCities(state: RelevantAdState): { [city: string]: CityElement } | null {
     const { cities } = state;
     return cities;
   },
-  getCoordinatesByMainCity(state): { [city: string]: [number, number] } {
+  getCoordinatesByMainCity(state: RelevantAdState): { [city: string]: [number, number] } {
     if (!state.cities) return {};
-    return Object.values(state.cities).reduce((prev, city: CityElement) => {
-      if (Object.hasOwn(prev, city.mainCity)) return prev;
-
-      prev[city.mainCity] = city.coordinates;
+    return Object.keys(state.cities).reduce((prev: { [city: string]: [number, number] }, city: string) => {
+      prev[city] = state.cities![city].coordinates;
 
       return prev;
     }, {} as { [city: string]: [number, number] });
   },
-  getMainCities(state): string[] {
+  getMainCities(state: RelevantAdState): string[] {
     if (!state.cities) return [];
     return Object.values(state.cities).reduce((prev, city: CityElement) => {
       if (prev.includes(city.mainCity)) return prev;

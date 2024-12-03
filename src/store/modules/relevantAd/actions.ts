@@ -1,5 +1,4 @@
 import { ActionTree, Commit, Dispatch } from "vuex";
-import axios from "axios";
 import { FilterState, RelevantAdState } from "./state-types";
 import { domain } from "@/helper/config";
 import { RelevantAdActionTypes } from "./action-types";
@@ -23,41 +22,48 @@ const fetchData = (
       exceedingValue?: number[];
       furnishedValue: string;
       cityValue: string;
-      districtValues: string[];
+      isLegal: boolean;
     };
   },
   commit: Commit,
   callback: CallbackSkeleton
 ) => {
   const page = payload.page && payload.page > 0 ? payload.page : 0;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const filters: any = payload.filters;
+  const filters: {
+    surfaceValue: number[];
+    roomValue: number[];
+    priceValue: number[];
+    exceedingValue?: number[];
+    furnishedValue: string;
+    cityValue: string;
+    isLegal: boolean;
+  } = payload.filters;
 
   if (filters.isLegal) {
     delete filters.exceedingValue;
   }
 
-  const strOptions: string = Object.keys(filters)
-    .map((key: string) => {
-      if (!filters[key] && filters[key] !== false) return null;
-      return key + "=" + filters[key];
-    })
-    .filter(Boolean)
-    .join("&");
+  const fields = Object.keys(filters) as (keyof typeof filters)[]
+
+  const strOptions: string = fields.map((key) => {
+    if (!filters[key] && filters[key] !== false) return null;
+    return (key === 'cityValue' ? 'cityValue2' : key) + "=" + filters[key];
+  })
+  .filter(Boolean)
+  .join("&");
 
   try {
     commit(RelevantAdMutationType.StartLoading);
     setTimeout(async () => {
-      const response = await axios({
-        url: `${domain}shop?page=${page}&perPage=${PER_PAGE}&${strOptions}`,
-      });
+      const response = await fetch(`${domain}shop?page=${page}&perPage=${PER_PAGE}&${strOptions}`);
 
-      const payload: RelevantAd[] = response && response.data;
-      const headers = response && response.headers;
+      const payload: RelevantAd[] = await response.json();
+      const headers = response.headers;
+      const totalCount: string = headers.get("x-total-count") || '';
       commit(RelevantAdMutationType.StopLoading);
       commit(
         RelevantAdMutationType.SetTotalPages,
-        Math.ceil(headers["x-total-count"] / PER_PAGE)
+        Math.ceil(parseInt(totalCount) || 0 / PER_PAGE)
       );
       callback(payload);
       // I'm a fucking asshole ↓
@@ -70,7 +76,6 @@ const fetchData = (
 };
 
 const fetchDataUntilTheEnd = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getters: any,
   dispatch: Dispatch
 ) => {
@@ -78,19 +83,20 @@ const fetchDataUntilTheEnd = (
     getters.getIsMapMode &&
     getters.getCurrentPage + 1 < getters.getTotalPages
   ) {
-    dispatch(RelevantAdActionTypes.SetNewPage, {
-      page: getters.getCurrentPage + 1,
-    });
+    if (getters.getCurrentFilters.cityValue === 'all' &&
+      getters.getCurrentPage < 5) { 
+      dispatch(RelevantAdActionTypes.SetNewPage, {
+        page: getters.getCurrentPage + 1,
+      });
+    }
   }
 };
 
 const fetchCities = async (commit: Commit) => {
   try {
-    const response = await axios({
-      url: `${domain}cities/list`,
-    });
+    const response = await fetch(`${domain}cities/list`);
 
-    const payload: RelevantAd[] = response && response.data;
+    const payload: RelevantAd[] = await response.json();
     commit(RelevantAdMutationType.SetCities, payload);
   } catch (err) {
     console.error(err);

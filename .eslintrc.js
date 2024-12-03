@@ -1,23 +1,19 @@
-module.exports = {
-  root: true,
-  env: {
-    node: true,
-  },
-  extends: [
-    "plugin:vue/vue3-essential",
-    "eslint:recommended",
-    "@vue/typescript/recommended",
-    "@vue/eslint-config-typescript/recommended",
-    "@vue/eslint-config-prettier",
-  ],
-  parserOptions: {
-    ecmaVersion: 2020,
-    parser: "@typescript-eslint/parser",
-  },
-  rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "vue/multi-word-component-names": "off",
-    "vue/no-reserved-component-names": "off",
-  },
-};
+import pluginVue from 'eslint-plugin-vue'
+
+export default [
+  ...pluginVue.configs['flat/strongly-recommended'],
+  { ignores: ['.gitignore', 'src/shadcn/ui/**', '**/dist'] },
+  {
+    files: ['**/*.{js,ts,vue}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+    rules: {
+      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+      "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+      "vue/multi-word-component-names": "off",
+      "vue/no-reserved-component-names": "off",
+    },
+  }
+]

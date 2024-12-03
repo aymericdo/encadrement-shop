@@ -8,13 +8,12 @@ import { RootState } from "@/store/types";
 export const initialFilters = {
   surfaceValue: [9, 100],
   roomValue: [1, 6],
-  priceValue: [200, 3000],
+  priceValue: [200, 5000],
   exceedingValue: [0, 1000],
   furnishedValue: "all",
   cityValue: "all",
   isHouseValue: null,
   isLegal: true,
-  districtValues: [],
 };
 
 export const state: RelevantAdState = {
