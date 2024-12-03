@@ -268,7 +268,6 @@ import { computed, ref, toRefs, watch } from "vue";
 import "@vueform/slider/themes/default.css";
 import store from "@/store";
 import { CityElement } from "@/store/modules/relevantAd/state-types";
-import { AcceptableValue } from "node_modules/radix-vue/dist/Combobox/ComboboxRoot";
 
 const props = defineProps({
   filtersCount: {
@@ -404,7 +403,7 @@ const setCityDropdownOptions = (currentCityList: { [city: string]: CityElement }
   }, [] as { groupBy: string; options: { value: string, label: string }[] }[]);
 };
 
-const handleSelectCity = async (city: AcceptableValue) => {
+const handleSelectCity = async (city: any) => {
   hasHouse.value = city === 'all' ? true : cityList.value[city].hasHouse;
 
   if (form.values.house === null) {
