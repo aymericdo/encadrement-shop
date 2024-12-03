@@ -1,7 +1,7 @@
 // Plugins
 import Vue from "@vitejs/plugin-vue";
 import { VitePWA } from "vite-plugin-pwa";
-// import ViteFonts from 'unplugin-fonts/vite'
+import Unfonts from 'unplugin-fonts/vite'
 import Components from 'unplugin-vue-components/vite'
 import VueRouter from 'unplugin-vue-router/vite'
 
@@ -47,6 +47,28 @@ export default ({ mode }: { mode: any }) => {
           start_url: "./",
           orientation: "portrait",
           display: "standalone",
+        },
+      }),
+      Unfonts({
+        custom: {
+          families: [{
+            name: 'Garnett',
+            local: 'Garnett',
+            src: './src/assets/fonts/*.ttf',
+            transform(font) {
+              if (font.basename === 'Garnett-Bold') {
+                // update the font weight
+                font.weight = 700
+              }
+      
+              // we can also return null to skip the font
+              return font
+            }
+          }],
+          display: 'auto',
+          preload: true,
+          prefetch: false,
+          injectTo: 'head-prepend',
         },
       }),
       Components({
