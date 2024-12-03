@@ -33,7 +33,7 @@
   import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
 
   const glob = import.meta.glob('@/assets/images/*-img.png', { eager: true })
-  const images = Object.entries(glob).map(([path]) => path)
+  const images = Object.entries(glob).map(([, value]) => (value as any).default)
 
   const props = defineProps({
     ad: {
@@ -59,6 +59,7 @@
 
   const website: string = ad.value?.website || ''
   const imagePath = images.find((image) => image.includes(website)) || 'src/assets/images/default-img.png'
+  console.log(imagePath)
 
   const getDisplayableDate = (date?: string): string => {
     if (!date) return "";
