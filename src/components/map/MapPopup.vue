@@ -1,12 +1,9 @@
 <template>
-  <l-popup>
-    <Card :ad="ad" :isFromMap="true"></Card>
-  </l-popup>
+  <Card :ad="ad" :isFromMap="true"></Card>
 </template>
 
 <script lang="ts" setup>
   import { toRefs } from "vue";
-  import { LPopup } from "@vue-leaflet/vue-leaflet";
   import { RelevantAd } from "@/store/modules/relevantAd/interfaces";
   import Card from "@/components/CardItem.vue";
 

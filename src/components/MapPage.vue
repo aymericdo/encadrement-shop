@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-1 p-4">
     <div class="map-page" :class="{ '-dark': isDarkMode, '-loading': isLoading }">
-      <l-map ref="mapRef" class="l-map" :zoom="zoom" :center="center">
+      <l-map :use-global-leaflet="false" ref="mapRef" class="l-map" :zoom="zoom" :center="center">
         <l-tile-layer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           layer-type="base"
@@ -18,9 +18,7 @@
             v-if="getPosAd(ad)"
             :lat-lng="getPosAd(ad)"
             :draggable="false"
-          >
-            <MapPopup :ad="ad"></MapPopup>
-          </l-marker>
+          ><l-popup><MapPopup :ad="ad"></MapPopup></l-popup></l-marker>
         </template>
       </l-map>
       <div class="center">
@@ -37,7 +35,7 @@
 
 <script lang="ts" setup>
   import { computed, Ref, ref, watchEffect } from "vue";
-  import { LMap, LGeoJson, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+  import { LMap, LGeoJson, LTileLayer, LMarker, LPopup } from "@vue-leaflet/vue-leaflet";
   import BounceLoader from "vue-spinner/src/BounceLoader.vue";
   import MapPopup from "@/components/map/MapPopup.vue";
   import { useStore } from "vuex";
