@@ -59,7 +59,6 @@
 
   const website: string = ad.value?.website || ''
   const imagePath = images.find((image) => image.includes(website)) || 'src/assets/images/default-img.png'
-  console.log(imagePath)
 
   const getDisplayableDate = (date?: string): string => {
     if (!date) return "";
