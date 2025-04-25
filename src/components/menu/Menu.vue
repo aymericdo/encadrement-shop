@@ -16,9 +16,6 @@
             >Encadrement</a
           >
         </li>
-        <li>
-          <router-link to="/about">À propos</router-link>
-        </li>
       </ul>
     </Sidebar>
   </div>
