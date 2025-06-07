@@ -9,7 +9,7 @@
     <Sidebar :isPanelOpen="isPanelOpen" @toggleClosing="togglingSidebar(false)">
       <ul class="sidebar-panel-nav">
         <li>
-          <router-link to="/">Sélection d'annonces conformes</router-link>
+          <router-link to="/">Sélection d'annonces</router-link>
         </li>
         <li>
           <a class="encadrement-redirect" href="https://encadrement-loyers.fr"
@@ -84,7 +84,7 @@ ul.sidebar-panel-nav > li a {
   font-weight: 500;
 }
 
-ul.sidebar-panel-nav > li a:not(.router-link-exact-active)::after {
+ul.sidebar-panel-nav > li a:not(.router-link-active)::after {
   position: absolute;
   bottom: -2px;
   content: "";
@@ -98,7 +98,7 @@ ul.sidebar-panel-nav > li a:not(.router-link-exact-active)::after {
   transform: translateX(-100%);
 }
 
-ul.sidebar-panel-nav > li a:not(.router-link-exact-active):hover::after {
+ul.sidebar-panel-nav > li a:not(.router-link-active):hover::after {
   transform: translateX(0%);
   opacity: 1;
   transition: all 150ms ease-in 0s;
@@ -107,24 +107,24 @@ ul.sidebar-panel-nav > li a:not(.router-link-exact-active):hover::after {
 
 ul.sidebar-panel-nav
   > li
-  a.encadrement-redirect:not(.router-link-exact-active) {
+  a.encadrement-redirect:not(.router-link-active) {
   text-shadow: 1px 1px $yellow;
 }
 
 ul.sidebar-panel-nav
   > li
-  a.encadrement-redirect:not(.router-link-exact-active):hover {
+  a.encadrement-redirect:not(.router-link-active):hover {
   text-shadow: 2px 2px $yellow;
 }
 
-ul.sidebar-panel-nav > li.-selected > a:not(.router-link-exact-active)::after {
+ul.sidebar-panel-nav > li.-selected > a:not(.router-link-active)::after {
   transform: translateX(0%);
   opacity: 1;
   transition: all 150ms ease-in 0s;
   transition-property: opacity, transform;
 }
 
-ul.sidebar-panel-nav > li a.router-link-exact-active {
+ul.sidebar-panel-nav > li a.router-link-active {
   opacity: 0.5;
   cursor: not-allowed;
 }
