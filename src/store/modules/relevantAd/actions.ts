@@ -94,7 +94,7 @@ const fetchDataUntilTheEnd = (
 
 const fetchCities = async (commit: Commit) => {
   try {
-    const response = await fetch(`${domain}cities/list`);
+    const response = await fetch(`${domain}cities/list?includeFake=true`);
 
     const payload: RelevantAd[] = await response.json();
     commit(RelevantAdMutationType.SetCities, payload);
