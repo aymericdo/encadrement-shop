@@ -58,7 +58,8 @@
   } = toRefs(props);
 
   const website: string = ad.value?.website || ''
-  const imagePath = images.find((image) => image.includes(website)) || 'src/assets/images/default-img.png'
+  const imagePath = images.find((image) => image.includes(website)) || images.find((image) => image.includes('default-img'))
+  console.log(images)
 
   const getDisplayableDate = (date?: string): string => {
     if (!date) return "";
